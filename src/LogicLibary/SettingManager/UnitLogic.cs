@@ -14,12 +14,26 @@ namespace LogicLibary.SettingManager
 
         public UnitLogic(string userkey):base(userkey)
         {
-            
+           
         }
 
         public ObjectSet<GoodsUnit> GetList()
         {
             return db.GoodsUnitSet;
+        }
+
+        public GoodsUnit GetUnitByID(int id)
+        {
+            GoodsUnit gu = null;
+            try
+            {
+                gu = db.GoodsUnitSet.Single(u => u.ID.Equals(id));
+            }
+            catch (System.Exception ex)
+            {
+            	
+            }
+            return gu;
         }
 
         public bool DeleteUnit(int ID)

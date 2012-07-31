@@ -9,12 +9,14 @@
             <asp:TextBox ID="txtGoodsName" runat="server" ValidationGroup="Goods"></asp:TextBox>
             <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtGoodsName"
                 ErrorMessage="*" ValidationGroup="Goods"></asp:RequiredFieldValidator>
-            <asp:DropDownList ID="ddpUnits" runat="server" ValidationGroup="Goods">
+            <asp:DropDownList ID="ddlUnits" runat="server" ValidationGroup="Goods">
             </asp:DropDownList>
-            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddpUnits"
+            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="ddlUnits"
                 ErrorMessage="*" ValidationGroup="Goods"></asp:RequiredFieldValidator>
-            <asp:DropDownList ID="DropDownList1" runat="server">
+            <asp:DropDownList ID="ddlBrand" runat="server" DataValueField="Value"  DataTextField="Text">
             </asp:DropDownList>
+            <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="ddlBrand"
+                ErrorMessage="*" ValidationGroup="Goods"></asp:RequiredFieldValidator>
             <asp:Button ID="btnAddGoods" runat="server" OnClick="btnAddGoods_Click" ValidationGroup="Goods"
                 Text="添加商品" />
         </div>

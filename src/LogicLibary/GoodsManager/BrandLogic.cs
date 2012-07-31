@@ -45,6 +45,20 @@ namespace LogicLibary.GoodsManager
             return false;
         }
 
+        public Brand GetBrandByID(int id)
+        {
+            Brand br = null;
+            try
+            {
+                br=db.BrandSet.Single(b => b.ID.Equals(id));
+            }
+            catch (System.Exception ex)
+            {
+            	
+            }
+            return br;
+        }
+
         public IEnumerable<Brand> Where(Func<Brand,bool> p)
         {
             // 不加权限控制
