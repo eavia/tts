@@ -6,6 +6,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using LogicLibary;
 using LogicLibary.GoodsManager;
+using LogicLibary.SettingManager;
 
 namespace TaobaoTesting.GoodsManager
 {
@@ -13,11 +14,12 @@ namespace TaobaoTesting.GoodsManager
     {
         private GoodsLogic logic;
         private BrandLogic blogic;
-
+        private UnitLogic ulogic;
         public GoodsList()
         {
             logic = new GoodsLogic(this.ContextUserKey);
             blogic = new BrandLogic(this.ContextUserKey);
+            ulogic = new UnitLogic(this.ContextUserKey);
         }
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -25,8 +27,8 @@ namespace TaobaoTesting.GoodsManager
             {
                 BindGridView();
                 BindDdpUnits();
-                this.DropDownList1.DataSource = BuildDropListItem();
-                this.DropDownList1.DataBind();
+                this.ddlBrand.DataSource = BuildDropListItem();
+                this.ddlBrand.DataBind();
             }
         }
 
@@ -38,7 +40,8 @@ namespace TaobaoTesting.GoodsManager
             foreach (Brand bd in bc.ChildBrandSet)
             {
                 ListItem lt = new ListItem();
-                lt.Text = perfix.PadLeft(bd.BrandName.Length + l, nbsp) + bd.BrandName;
+                string tmpStr = perfix.PadLeft(perfix.Length + l, nbsp);
+                lt.Text = tmpStr + bd.BrandName;
                 lt.Value = bd.ID.ToString();
                 lst.Add(lt);
                 if (bd.ChildBrandSet.Count != 0)
@@ -77,47 +80,47 @@ namespace TaobaoTesting.GoodsManager
 
         protected void btnAddGoods_Click(object sender, EventArgs e)
         {
-            int traget = int.Parse(ddpUnits.SelectedValue);
-            GoodsUnit u = db.GoodsUnitSet.Single(x => x.ID.Equals(traget));
-            Goods goods = new Goods();
-            goods.Unit = u;
-            goods.GoodsName = txtGoodsName.Text.Trim();
-            goods.UserKey = this.ContextUserKey;
-
-            int bid=int.Parse(this.ddpUnits.SelectedValue);
-            goods.Brand=db.BrandSet.Single(x => x.ID == bid);
-            db.GoodsSet.AddObject(goods);
-            db.SaveChanges();
-            ddpUnits.SelectedValue = "-1";
-            txtGoodsName.Text = "";
-            BindGridView();
+            GoodsUnit u = ulogic.GetUnitByID(int.Parse(ddlUnits.SelectedValue));
+            Brand b = blogic.GetBrandByID(int.Parse(this.ddlBrand.SelectedValue));
+            if (u != null && b != null)
+            {
+                Goods goods = new Goods();
+                goods.Unit = u;
+                goods.Brand = b;
+                goods.GoodsName = txtGoodsName.Text.Trim();
+                goods.UserKey = this.ContextUserKey;
+                if (logic.AddGoods(goods))
+                {
+                    ddlUnits.SelectedValue = "-1";
+                    txtGoodsName.Text = "";
+                    BindGridView();
+                }
+            }
         }
 
         private void BindGridView()
         {
-            StoreEntities db = new StoreEntities();
-            dlGoods.DataSource = db.GoodsSet;
+            dlGoods.DataSource = logic.GetGoodsList();
             dlGoods.DataBind();
         }
 
         private void BindDdpUnits()
         {
-            ddpUnits.Items.Clear();
-            ddpUnits.Items.Add(new ListItem()
+            ddlUnits.Items.Clear();
+            ddlUnits.Items.Add(new ListItem()
             {
                 Text = "",
                 Value = "-1"
             });
-            StoreEntities db = new StoreEntities();
-            foreach (GoodsUnit u in db.GoodsUnitSet)
+            foreach (GoodsUnit u in ulogic.GetUnitList())
             {
-                ddpUnits.Items.Add(new ListItem()
+                ddlUnits.Items.Add(new ListItem()
                 {
                     Text = u.UnitName,
                     Value = u.ID.ToString()
                 });
             }
-            ddpUnits.SelectedIndex = 0;
+            ddlUnits.SelectedIndex = 0;
         }
 
 
@@ -137,5 +140,7 @@ namespace TaobaoTesting.GoodsManager
                 dl.SelectedIndex = e.Item.ItemIndex;
             }
         }
+
+
     }
 }

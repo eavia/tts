@@ -27,7 +27,7 @@ namespace TaobaoTesting.SettingManager
 
         private void BindUnits()
         {
-            this.dlUnits.DataSource = logic.GetList();
+            this.dlUnits.DataSource = logic.GetUnitList();
             this.dlUnits.DataBind();
         }
 

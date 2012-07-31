@@ -1,6 +1,7 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true"
     CodeBehind="BrandList.aspx.cs" Inherits="TaobaoTesting.GoodsManager.BrandList" %>
 
+<%@ Register Assembly="AspNetPager" Namespace="Wuqi.Webdiyer" TagPrefix="webdiyer" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
@@ -15,6 +16,7 @@
     <div id="listdiv" style="width: 700px; display: inline; float: right; margin-left: 5px;
         margin-right: 0px">
         <asp:Panel ID="pelEditor" runat="server" BorderColor="#CCFFCC" Height="25px" HorizontalAlign="Center">
+            <asp:Label ID="Label1" runat="server" Text="品牌名称:"></asp:Label>
             <asp:TextBox ID="txtName" runat="server" CssClass="textBoxLine"></asp:TextBox>
             <asp:Button ID="btnAddNode" runat="server" Text="添加" OnClick="btnAddNode_Click" /><asp:Button
                 ID="btnDelete" runat="server" Text="删除" OnClick="btnDelete_Click" />
@@ -25,14 +27,23 @@
                 <ItemStyle ForeColor="Black" />
                 <HeaderTemplate>
                     <asp:Table ID="tabHeader" runat="server">
-                        <asp:TableRow>
+                        <asp:TableHeaderRow>
                             <asp:TableHeaderCell Width="35px" HorizontalAlign="Center" VerticalAlign="Middle">序号</asp:TableHeaderCell>
                             <asp:TableHeaderCell Width="100px" HorizontalAlign="Center" VerticalAlign="Middle">商品编号</asp:TableHeaderCell>
                             <asp:TableHeaderCell Width="270px" HorizontalAlign="Center" VerticalAlign="Middle">商品名称</asp:TableHeaderCell>
                             <asp:TableHeaderCell Width="120px" HorizontalAlign="Center" VerticalAlign="Middle">操作</asp:TableHeaderCell>
-                        </asp:TableRow>
+                        </asp:TableHeaderRow>
                     </asp:Table>
                 </HeaderTemplate>
+                <FooterTemplate>
+                    <asp:Table ID="tabFooter" runat="server">
+                        <asp:TableFooterRow Height="30px">
+                            <asp:TableCell HorizontalAlign="Center" VerticalAlign="Middle" ColumnSpan="4">
+                                <asp:Label ID="lblEmpty" runat="server" Text="无记录.." Visible='<%#bool.Parse((dlGoods.Items.Count==0).ToString())%>'></asp:Label>
+                            </asp:TableCell>
+                        </asp:TableFooterRow>
+                    </asp:Table>
+                </FooterTemplate>
                 <HeaderStyle Height="25px" />
                 <ItemStyle Height="30px" />
                 <ItemTemplate>
@@ -45,13 +56,22 @@
                             <asp:TableCell HorizontalAlign="Center" VerticalAlign="Middle"><%#Eval("GoodsName")%></asp:TableCell>
                             <asp:TableCell HorizontalAlign="Center" VerticalAlign="Middle">
                                 <asp:DropDownList ID="dlpBrandList" runat="server" DataTextField="Text" DataValueField="Value"
-                                    Width="110px">
+                                    AutoPostBack="true" OnSelectedIndexChanged="ddlBrand_SelectedIndexChanged" Width="110px">
                                 </asp:DropDownList>
                             </asp:TableCell>
                         </asp:TableRow>
                     </asp:Table>
                 </ItemTemplate>
             </asp:DataList>
+            <table width="99%">
+                <tr style="height: 20px">
+                    <td align="center">
+                        <webdiyer:AspNetPager ID="pgrBrandList" runat="server" Visible='<%#bool.Parse((dlGoods.Items.Count>0).ToString())%>'
+                            AlwaysShow="true" PageSize="10" OnPageChanged="pgrBrandList_PageChanged">
+                        </webdiyer:AspNetPager>
+                    </td>
+                </tr>
+            </table>
         </asp:Panel>
     </div>
 </asp:Content>

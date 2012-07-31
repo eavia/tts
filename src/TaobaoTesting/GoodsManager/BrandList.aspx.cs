@@ -39,7 +39,8 @@ namespace TaobaoTesting.GoodsManager
             foreach (Brand bd in bc.ChildBrandSet)
             {
                 ListItem lt = new ListItem();
-                lt.Text = perfix.PadLeft(bd.BrandName.Length + l, nbsp) + bd.BrandName;
+                string tmpStr = perfix.PadLeft(perfix.Length + l, nbsp);
+                lt.Text = tmpStr + bd.BrandName;
                 lt.Value = bd.ID.ToString();
                 lst.Add(lt);
                 if (bd.ChildBrandSet.Count != 0)
@@ -171,14 +172,42 @@ namespace TaobaoTesting.GoodsManager
             }
         }
 
+        protected void ddlBrand_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            DropDownList d = (DropDownList)sender;
+            int brandid = int.Parse(d.SelectedValue);
+            Control parent = d.Parent.Parent;
+            Literal lta = (Literal)parent.FindControl("lbId");
+            int goodsid = int.Parse(lta.Text);
+            Goods g = glogic.GetGoodsByID(goodsid);
+            Brand b = logic.GetBrandByID(brandid);
+            if (g != null && b != null)
+            {
+                g.Brand = b;
+                if (glogic.SaveChanges())
+                {
+                    string id = this.trvBrand.SelectedValue;
+                    int rid = int.Parse(id);
+                    BindGoodsListWithBrandID(rid);
+                }
+            }
+        }
+
         protected void TreeView1_SelectedNodeChanged(object sender, EventArgs e)
         {
             TreeView tr = (TreeView)sender;
             string id = tr.SelectedValue;
             int rid = int.Parse(id);
             ExplandTreeNode(tr);
-            var gs = glogic.GetGoodsWithBrandID(rid);
-            this.dlGoods.DataSource = gs;
+            BindGoodsListWithBrandID(rid);
+        }
+
+        public void BindGoodsListWithBrandID(int id)
+        {
+            var gs = glogic.GetGoodsWithBrandID(id);
+            this.pgrBrandList.RecordCount = gs.Count();
+            var gps = gs.OrderByDescending(x => x.ID).Skip((this.pgrBrandList.StartRecordIndex > 0 ? this.pgrBrandList.StartRecordIndex - 1 : 0)).Take(pgrBrandList.PageSize);
+            this.dlGoods.DataSource = gps;
             this.dlGoods.DataBind();
         }
 
@@ -197,6 +226,13 @@ namespace TaobaoTesting.GoodsManager
                     dl.Items.FindByValue(gs.Brand.ID.ToString()).Selected = true;
                 }
             }
+        }
+
+        protected void pgrBrandList_PageChanged(object sender, EventArgs e)
+        {
+            string id = this.trvBrand.SelectedValue;
+            int rid = int.Parse(id);
+            BindGoodsListWithBrandID(rid);
         }
 
     }
