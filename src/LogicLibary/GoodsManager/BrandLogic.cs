@@ -6,20 +6,20 @@ using System.Data.Objects;
 
 namespace LogicLibary.GoodsManager
 {
-    public class BrandLogic:BaseLogic
+    public class BrandLogic : BaseLogic
     {
-        
+
         private BrandLogic() { }
 
-        public BrandLogic(string userkey) : base(userkey) { }
+        public BrandLogic(ObjectContext context, string userkey) : base(context,userkey) { }
 
         public bool AddBrand(Brand b)
         {
             try
             {
                 b.Modified = DateTime.Now;
-                db.BrandSet.AddObject(b);
-                db.SaveChanges();
+                this.ObjectContext.BrandSet.AddObject(b);
+                this.ObjectContext.SaveChanges();
                 return true;
             }
             catch
@@ -33,8 +33,8 @@ namespace LogicLibary.GoodsManager
         {
             try
             {
-                db.BrandSet.DeleteObject(b);
-                db.SaveChanges();
+                this.ObjectContext.BrandSet.DeleteObject(b);
+                this.ObjectContext.SaveChanges();
                 return true;
             }
             catch
@@ -49,34 +49,34 @@ namespace LogicLibary.GoodsManager
             Brand br = null;
             try
             {
-                br=db.BrandSet.Single(b => b.ID.Equals(id));
+                br = this.ObjectContext.BrandSet.Single(b => b.ID.Equals(id));
             }
             catch (System.Exception ex)
             {
-            	
+
             }
             return br;
         }
 
-        public IEnumerable<Brand> Where(Func<Brand,bool> p)
+        public IEnumerable<Brand> Where(Func<Brand, bool> p)
         {
             // 不加权限控制
-            return db.BrandSet.Where(p);
+            return this.ObjectContext.BrandSet.Where(p);
         }
 
-        public ObjectQuery<Brand> GetRootBrand()
+        public IQueryable<Brand> GetRootBrand()
         {
 
-            return (ObjectQuery<Brand>)(from b in db.BrandSet
-                                                     where b.RootBrand == null && b.UserKey.Equals(this.ContextUserKey)
-                                                     select b);
+            return (from b in this.ObjectContext.BrandSet
+                    where b.RootBrand == null && b.UserKey.Equals(this.ContextUserKey)
+                    select b);
         }
 
-        public ObjectQuery<Brand> GetChildren(int id)
+        public IQueryable<Brand> GetChildren(int id)
         {
-            return (ObjectQuery<Brand>)from x in db.BrandSet
-                                       where x.ID.Equals(id) && x.UserKey.Equals(this.ContextUserKey)
-                                       select x;
+            return from x in this.ObjectContext.BrandSet
+                   where x.ID.Equals(id) && x.UserKey.Equals(this.ContextUserKey)
+                   select x;
         }
     }
 }

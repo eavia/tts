@@ -10,11 +10,14 @@ using LogicLibary.SettingManager;
 
 namespace TaobaoTesting.GoodsManager
 {
-    public partial class ChangedList : System.Web.UI.Page
+    public partial class ChangedList : BasePage
     {
-        private GoodsLogic logic;
+        private ChangedLogic logic;
+        private GoodsLogic glogic;
         private BrandLogic blogic;
         private UnitLogic ulogic;
+
+        private StoreEntities dbContext = new StoreEntities();
 
         internal class PageChange
         {
@@ -57,7 +60,13 @@ namespace TaobaoTesting.GoodsManager
             }
         }
 
-        StoreEntities db = new StoreEntities();
+        public ChangedList()
+        {
+            logic = new ChangedLogic(dbContext,this.ContextUserKey);
+            glogic = new GoodsLogic(dbContext,this.ContextUserKey);
+            blogic = new BrandLogic(dbContext,this.ContextUserKey);
+            ulogic = new UnitLogic(dbContext,this.ContextUserKey);
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -69,7 +78,7 @@ namespace TaobaoTesting.GoodsManager
 
         private void BindGoodsList()
         {
-            this.dlGoods.DataSource = db.GoodsSet;
+            this.dlGoods.DataSource = glogic.GetGoodsList();
             this.dlGoods.DataBind();
         }
 
@@ -88,7 +97,7 @@ namespace TaobaoTesting.GoodsManager
         {
             List<PageChange> lst = new List<PageChange>();
             int gid = int.Parse(goodsid);
-            Goods goods = db.GoodsSet.Single(x => x.ID.Equals(gid));
+            Goods goods = glogic.GetGoodsByID(gid);
             foreach (Changed cd in goods.ChangedSet)
             {
                 PageChange pc = new PageChange();
@@ -123,17 +132,18 @@ namespace TaobaoTesting.GoodsManager
                 if (lt.Text == "0")
                 {
                     int goodsid = int.Parse(((HiddenField)dli.FindControl("hfEditGoodsID")).Value);
-                    Goods goods = db.GoodsSet.Single(x => x.ID.Equals(goodsid));
+                    Goods goods = glogic.GetGoodsList().Single(x => x.ID.Equals(goodsid));
                     Changed chg = new Changed();
                     chg.Quantity = double.Parse(((Literal)dli.FindControl("ltaQuantity")).Text);
                     chg.Value = double.Parse(((TextBox)dli.FindControl("ltaValue")).Text);
                     string datestring = ((TextBox)dli.FindControl("ltaDate")).Text;
                     chg.Date = DateTime.Parse(datestring);
-                    goods.ChangedSet.Add(chg);
-                    goods.Quantity =goods.Quantity + chg.Value;
-                    db.SaveChanges();
-                    BindGoodsList();
-                    BindChangeListByGID(goodsid.ToString());
+                    chg.UserKey = this.ContextUserKey;
+                    if (logic.AddChangedToGoods(goods, chg))
+                    {
+                        BindGoodsList();
+                        BindChangeListByGID(goodsid.ToString());
+                    }
                 }
             }
         }

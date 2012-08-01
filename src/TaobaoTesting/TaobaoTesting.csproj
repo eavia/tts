@@ -13,7 +13,7 @@
     <RootNamespace>TaobaoTesting</RootNamespace>
     <AssemblyName>TaobaoTesting</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-	<UseIISExpress>False</UseIISExpress>
+    <UseIISExpress>False</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

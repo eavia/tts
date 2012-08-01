@@ -11,15 +11,18 @@ namespace LogicLibary.GoodsManager
 
         private GoodsLogic() { }
 
-        public GoodsLogic(string userkey) : base(userkey) { }
+        public GoodsLogic(ObjectContext context, string userkey)
+            : base(context, userkey)
+        {
+
+        }
 
         public bool AddGoods(Goods g)
         {
             try
             {
                 g.Modified = DateTime.Now;
-                db.GoodsSet.AddObject(g);
-                db.SaveChanges();
+                this.ObjectContext.GoodsSet.Attach(g);
                 return true;
             }
             catch (System.Exception ex)
@@ -29,32 +32,18 @@ namespace LogicLibary.GoodsManager
             return false;
         }
 
-        public ObjectQuery<Goods> GetGoodsWithBrandID(int id)
+        public IQueryable<Goods> GetGoodsWithBrandID(int id)
         {
-            return (ObjectQuery<Goods>)from g in db.GoodsSet
-                                       where g.Brand.ID.Equals(id) && g.UserKey.Equals(this.ContextUserKey)
-                                       select g;
+            return from g in this.ObjectContext.GoodsSet
+                   where g.Brand.ID.Equals(id) && g.UserKey.Equals(this.ContextUserKey)
+                   select g;
         }
 
-        public ObjectQuery<Goods> GetGoodsList()
+        public IQueryable<Goods> GetGoodsList()
         {
-            return (ObjectQuery<Goods>)from g in db.GoodsSet
-                                       where g.UserKey.Equals(this.ContextUserKey)
-                                       select g;
-        }
-
-        public bool SaveChanges()
-        {
-            try
-            {
-                db.SaveChanges();
-                return true;
-            }
-            catch
-            {
-
-            }
-            return false;
+            return from g in this.ObjectContext.GoodsSet
+                   where g.UserKey.Equals(this.ContextUserKey)
+                   select g;
         }
 
         public Goods GetGoodsByID(int goodsid)
@@ -62,7 +51,7 @@ namespace LogicLibary.GoodsManager
             Goods g = null;
             try
             {
-                g = db.GoodsSet.Single(gg => gg.ID.Equals(goodsid) && gg.UserKey.Equals(this.ContextUserKey));
+                g = this.ObjectContext.GoodsSet.Single(gg => gg.ID.Equals(goodsid) && gg.UserKey.Equals(this.ContextUserKey));
             }
             catch
             {

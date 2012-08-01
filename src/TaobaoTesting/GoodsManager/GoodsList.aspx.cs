@@ -16,11 +16,13 @@ namespace TaobaoTesting.GoodsManager
         private BrandLogic blogic;
         private UnitLogic ulogic;
 
+        private StoreEntities dbContext = new StoreEntities();
+
         public GoodsList()
         {
-            logic = new GoodsLogic(this.ContextUserKey);
-            blogic = new BrandLogic(this.ContextUserKey);
-            ulogic = new UnitLogic(this.ContextUserKey);
+            logic = new GoodsLogic(dbContext, this.ContextUserKey);
+            blogic = new BrandLogic(dbContext, this.ContextUserKey);
+            ulogic = new UnitLogic(dbContext, this.ContextUserKey);
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -59,9 +61,7 @@ namespace TaobaoTesting.GoodsManager
         {
             StoreEntities db = new StoreEntities();
             List<ListItem> lst = new List<ListItem>();
-            var bs = from b in db.BrandSet
-                     where b.RootBrand == null
-                     select b;
+            var bs = blogic.GetRootBrand();
             int l = 0;
             foreach (Brand br in bs)
             {
@@ -114,7 +114,7 @@ namespace TaobaoTesting.GoodsManager
                 Text = "",
                 Value = "-1"
             });
-            foreach (GoodsUnit u in ulogic.GetUnitList())
+            foreach (GoodsUnit u in ulogic.GetUnitList(true))
             {
                 ddlUnits.Items.Add(new ListItem()
                 {

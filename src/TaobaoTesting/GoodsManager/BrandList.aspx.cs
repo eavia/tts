@@ -16,10 +16,12 @@ namespace TaobaoTesting.GoodsManager
         BrandLogic logic;
         GoodsLogic glogic;
 
+        StoreEntities dbContext = new StoreEntities();
+
         public BrandList()
         {
-            logic = new BrandLogic(this.ContextUserKey);
-            glogic = new GoodsLogic(this.ContextUserKey);
+            logic = new BrandLogic(dbContext,this.ContextUserKey);
+            glogic = new GoodsLogic(dbContext,this.ContextUserKey);
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -184,7 +186,7 @@ namespace TaobaoTesting.GoodsManager
             if (g != null && b != null)
             {
                 g.Brand = b;
-                if (glogic.SaveChanges())
+                if (dbContext.SaveChanges()>0)
                 {
                     string id = this.trvBrand.SelectedValue;
                     int rid = int.Parse(id);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Data.Objects;
 
 namespace LogicLibary
 {
@@ -9,38 +10,23 @@ namespace LogicLibary
     {
         internal BaseLogic() { }
 
-        static StoreEntities dbContext;
-        static object lockobj = new object();
-
-        public StoreEntities db
+        StoreEntities _objectContext;
+        public StoreEntities ObjectContext
         {
-            private set { }
-            get
-            {
-                if (dbContext == null)
-                {
-                    lock (lockobj)
-                    {
-                        if (dbContext == null)
-                        {
-                            dbContext = new StoreEntities();
-                        }
-                    }
-                }
-                return dbContext;
-            }
+            get { return _objectContext; }
+            private set { _objectContext = value; }
         }
 
-
-        public String ContextUserKey {
+        public String ContextUserKey
+        {
             private set;
             get;
         }
 
-        public BaseLogic(string userkey)
+        public BaseLogic(ObjectContext context, string userkey)
         {
+            this.ObjectContext = (StoreEntities)context;
             this.ContextUserKey = userkey;
         }
-
     }
 }

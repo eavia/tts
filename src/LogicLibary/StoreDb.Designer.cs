@@ -827,6 +827,30 @@ namespace LogicLibary
         private global::System.DateTime _Modified;
         partial void OnModifiedChanging(global::System.DateTime value);
         partial void OnModifiedChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean Enable
+        {
+            get
+            {
+                return _Enable;
+            }
+            set
+            {
+                OnEnableChanging(value);
+                ReportPropertyChanging("Enable");
+                _Enable = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Enable");
+                OnEnableChanged();
+            }
+        }
+        private global::System.Boolean _Enable = false;
+        partial void OnEnableChanging(global::System.Boolean value);
+        partial void OnEnableChanged();
 
         #endregion
     
@@ -1061,6 +1085,30 @@ namespace LogicLibary
         private global::System.DateTime _Modified;
         partial void OnModifiedChanging(global::System.DateTime value);
         partial void OnModifiedChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean Enable
+        {
+            get
+            {
+                return _Enable;
+            }
+            set
+            {
+                OnEnableChanging(value);
+                ReportPropertyChanging("Enable");
+                _Enable = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Enable");
+                OnEnableChanged();
+            }
+        }
+        private global::System.Boolean _Enable = false;
+        partial void OnEnableChanging(global::System.Boolean value);
+        partial void OnEnableChanged();
 
         #endregion
     

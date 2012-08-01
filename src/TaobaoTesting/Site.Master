@@ -41,7 +41,7 @@
                                 IncludeStyleBlock="false" Orientation="Horizontal">
                                 <Items>
                                     <asp:MenuItem NavigateUrl="~/Default.aspx" Text="主页" />
-                                    <asp:MenuItem NavigateUrl="#" Text="商品管理" >
+                                    <asp:MenuItem Text="商品管理" >
                                         <asp:MenuItem NavigateUrl="~/GoodsManager/BrandList.aspx" Text="品牌目录" 
                                             Value="品牌目录">
                                         </asp:MenuItem>
