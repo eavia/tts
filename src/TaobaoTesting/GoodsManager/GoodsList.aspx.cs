@@ -15,12 +15,14 @@ namespace TaobaoTesting.GoodsManager
         private GoodsLogic logic;
         private BrandLogic blogic;
         private UnitLogic ulogic;
+
         public GoodsList()
         {
             logic = new GoodsLogic(this.ContextUserKey);
             blogic = new BrandLogic(this.ContextUserKey);
             ulogic = new UnitLogic(this.ContextUserKey);
         }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -123,7 +125,6 @@ namespace TaobaoTesting.GoodsManager
             ddlUnits.SelectedIndex = 0;
         }
 
-
         protected void dlGoods_SelectedIndexChanged(object sender, EventArgs e)
         {
             DataList dl = (DataList)sender;
@@ -140,7 +141,5 @@ namespace TaobaoTesting.GoodsManager
                 dl.SelectedIndex = e.Item.ItemIndex;
             }
         }
-
-
     }
 }

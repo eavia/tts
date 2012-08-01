@@ -5,11 +5,16 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using LogicLibary;
+using LogicLibary.GoodsManager;
+using LogicLibary.SettingManager;
 
 namespace TaobaoTesting.GoodsManager
 {
     public partial class ChangedList : System.Web.UI.Page
     {
+        private GoodsLogic logic;
+        private BrandLogic blogic;
+        private UnitLogic ulogic;
 
         internal class PageChange
         {
@@ -51,7 +56,9 @@ namespace TaobaoTesting.GoodsManager
                 set { date = value; }
             }
         }
+
         StoreEntities db = new StoreEntities();
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
