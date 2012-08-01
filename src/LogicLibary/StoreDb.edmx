@@ -1,0 +1,433 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="LogicLibary.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="LogicLibaryStoreContainer">
+    <EntitySet Name="GoodsSet" EntityType="LogicLibary.Store.GoodsSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="GoodsUnitSet" EntityType="LogicLibary.Store.GoodsUnitSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="OrderBodySet" EntityType="LogicLibary.Store.OrderBodySet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="OrderHeadSet" EntityType="LogicLibary.Store.OrderHeadSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="BrandSet" EntityType="LogicLibary.Store.BrandSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="ChangedSet" EntityType="LogicLibary.Store.ChangedSet" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="OrderHeadOrderBodySet" Association="LogicLibary.Store.OrderHeadOrderBodySet">
+      <End Role="OrderHead" EntitySet="OrderHeadSet" />
+      <End Role="OrderBodySet" EntitySet="OrderBodySet" />
+    </AssociationSet>
+    <AssociationSet Name="ChildBrand" Association="LogicLibary.Store.BrandInBrand">
+      <End Role="Brand" EntitySet="BrandSet" />
+      <End Role="ChildBrand" EntitySet="BrandSet" />
+    </AssociationSet>
+    <AssociationSet Name="GoodsUnitGoods" Association="LogicLibary.Store.GoodsUnitGoods">
+      <End Role="GoodsUnit" EntitySet="GoodsUnitSet" />
+      <End Role="Goods" EntitySet="GoodsSet" />
+    </AssociationSet>
+    <AssociationSet Name="BrandGoods" Association="LogicLibary.Store.BrandGoods">
+      <End Role="Brand" EntitySet="BrandSet" />
+      <End Role="Goods" EntitySet="GoodsSet" />
+    </AssociationSet>
+    <AssociationSet Name="GoodsChanged" Association="LogicLibary.Store.GoodsChanged">
+      <End Role="Goods" EntitySet="GoodsSet" />
+      <End Role="ChangedSet" EntitySet="ChangedSet" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="GoodsSet">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="GoodsName" Type="nvarchar" Nullable="false" MaxLength="50" />
+    <Property Name="Quantity" Type="float" Nullable="false" />
+    <Property Name="UserKey" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Modified" Type="datetime" Nullable="false" />
+    <Property Name="Unit_ID" Type="int" Nullable="false" />
+    <Property Name="Brand_ID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="GoodsUnitSet">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UnitName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="UserKey" Type="nvarchar" Nullable="false" MaxLength="36" />
+    <Property Name="Modified" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="OrderBodySet">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Value" Type="smallint" Nullable="false" />
+    <Property Name="OrderHead_ID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="OrderHeadSet">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Buyer" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Sum" Type="int" Nullable="false" />
+    <Property Name="Status" Type="nvarchar(max)" Nullable="false" DefaultValue="NEW" />
+  </EntityType>
+  <EntityType Name="BrandSet">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BrandName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="UserKey" Type="nvarchar" Nullable="false" MaxLength="36" />
+    <Property Name="Modified" Type="datetime" Nullable="false" />
+    <Property Name="RootBrand_ID" Type="int" Nullable="true" />
+  </EntityType>
+  <EntityType Name="ChangedSet">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Value" Type="float" Nullable="false" />
+    <Property Name="Date" Type="datetime" Nullable="false" />
+    <Property Name="Quantity" Type="float" Nullable="false" />
+    <Property Name="UserKey" Type="nvarchar" Nullable="false" MaxLength="36" />
+    <Property Name="Modified" Type="datetime" Nullable="false" />
+    <Property Name="Goods_ID" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="OrderHeadOrderBodySet">
+    <End Role="OrderHead" Type="LogicLibary.Store.OrderHeadSet" Multiplicity="1" />
+    <End Role="OrderBodySet" Type="LogicLibary.Store.OrderBodySet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrderHead">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="OrderBodySet">
+        <PropertyRef Name="OrderHead_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="BrandInBrand">
+    <End Role="Brand" Type="LogicLibary.Store.BrandSet" Multiplicity="0..1" />
+    <End Role="ChildBrand" Type="LogicLibary.Store.BrandSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Brand">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ChildBrand">
+        <PropertyRef Name="RootBrand_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="GoodsUnitGoods">
+    <End Role="GoodsUnit" Type="LogicLibary.Store.GoodsUnitSet" Multiplicity="1" />
+    <End Role="Goods" Type="LogicLibary.Store.GoodsSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GoodsUnit">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Goods">
+        <PropertyRef Name="Unit_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="BrandGoods">
+    <End Role="Brand" Type="LogicLibary.Store.BrandSet" Multiplicity="1" />
+    <End Role="Goods" Type="LogicLibary.Store.GoodsSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Brand">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Goods">
+        <PropertyRef Name="Brand_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="GoodsChanged">
+    <End Role="Goods" Type="LogicLibary.Store.GoodsSet" Multiplicity="1" />
+    <End Role="ChangedSet" Type="LogicLibary.Store.ChangedSet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Goods">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ChangedSet">
+        <PropertyRef Name="Goods_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="LogicLibary" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="StoreEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="GoodsSet" EntityType="LogicLibary.Goods" />
+          <EntitySet Name="GoodsUnitSet" EntityType="LogicLibary.GoodsUnit" />
+          <EntitySet Name="OrderBodySet" EntityType="LogicLibary.OrderBody" />
+          <EntitySet Name="OrderHeadSet" EntityType="LogicLibary.OrderHead" />
+          <AssociationSet Name="OrderHeadOrderBodySet" Association="LogicLibary.OrderHeadOrderBodySet">
+            <End Role="OrderHead" EntitySet="OrderHeadSet" />
+            <End Role="OrderBodySet" EntitySet="OrderBodySet" />
+          </AssociationSet>
+          <EntitySet Name="BrandSet" EntityType="LogicLibary.Brand" />
+          <AssociationSet Name="ChildBrand" Association="LogicLibary.BrandInBrand">
+            <End Role="Brand" EntitySet="BrandSet" />
+            <End Role="ChildBrand" EntitySet="BrandSet" />
+          </AssociationSet>
+          <EntitySet Name="ChangedSet" EntityType="LogicLibary.Changed" />
+          <AssociationSet Name="GoodsUnitGoods" Association="LogicLibary.GoodsUnitGoods">
+            <End Role="GoodsUnit" EntitySet="GoodsUnitSet" />
+            <End Role="Goods" EntitySet="GoodsSet" />
+          </AssociationSet>
+          <AssociationSet Name="BrandGoods" Association="LogicLibary.BrandGoods">
+            <End Role="Brand" EntitySet="BrandSet" />
+            <End Role="Goods" EntitySet="GoodsSet" />
+          </AssociationSet>
+          <AssociationSet Name="GoodsChanged" Association="LogicLibary.GoodsChanged">
+            <End Role="Goods" EntitySet="GoodsSet" />
+            <End Role="ChangedSet" EntitySet="ChangedSet" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Goods">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GoodsName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Type="Double" Name="Quantity" Nullable="false" />
+          <Property Type="String" Name="UserKey" Nullable="false" />
+          <Property Type="DateTime" Name="Modified" Nullable="false" />
+          <NavigationProperty Name="Unit" Relationship="LogicLibary.GoodsUnitGoods" FromRole="Goods" ToRole="GoodsUnit" />
+          <NavigationProperty Name="Brand" Relationship="LogicLibary.BrandGoods" FromRole="Goods" ToRole="Brand" />
+          <NavigationProperty Name="ChangedSet" Relationship="LogicLibary.GoodsChanged" FromRole="Goods" ToRole="ChangedSet" />
+        </EntityType>
+        <EntityType Name="GoodsUnit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UnitName" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Type="String" Name="UserKey" Nullable="false" MaxLength="36" />
+          <Property Type="DateTime" Name="Modified" Nullable="false" />
+          <NavigationProperty Name="GoodsSet" Relationship="LogicLibary.GoodsUnitGoods" FromRole="GoodsUnit" ToRole="Goods" />
+        </EntityType>
+        <EntityType Name="OrderBody">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int16" Name="Value" Nullable="false" />
+          <NavigationProperty Name="OrderHead" Relationship="LogicLibary.OrderHeadOrderBodySet" FromRole="OrderBodySet" ToRole="OrderHead" />
+        </EntityType>
+        <EntityType Name="OrderHead">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Buyer" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="Sum" Nullable="false" />
+          <Property Type="String" Name="Status" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" DefaultValue="NEW" />
+          <NavigationProperty Name="OrderBodySet" Relationship="LogicLibary.OrderHeadOrderBodySet" FromRole="OrderHead" ToRole="OrderBodySet" />
+        </EntityType>
+        <Association Name="OrderHeadOrderBodySet">
+          <End Type="LogicLibary.OrderHead" Role="OrderHead" Multiplicity="1" />
+          <End Type="LogicLibary.OrderBody" Role="OrderBodySet" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Brand">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="ChildBrandSet" Relationship="LogicLibary.BrandInBrand" FromRole="Brand" ToRole="ChildBrand" />
+          <NavigationProperty Name="RootBrand" Relationship="LogicLibary.BrandInBrand" FromRole="ChildBrand" ToRole="Brand" />
+          <Property Type="String" Name="BrandName" Nullable="false" />
+          <Property Type="String" Name="UserKey" Nullable="false" MaxLength="36" />
+          <Property Type="DateTime" Name="Modified" Nullable="false" />
+          <NavigationProperty Name="Goods" Relationship="LogicLibary.BrandGoods" FromRole="Brand" ToRole="Goods" />
+        </EntityType>
+        <Association Name="BrandInBrand">
+          <End Type="LogicLibary.Brand" Role="Brand" Multiplicity="0..1" >
+          </End>
+          <End Type="LogicLibary.Brand" Role="ChildBrand" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Changed">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Double" Name="Value" Nullable="false" />
+          <Property Type="DateTime" Name="Date" Nullable="false" />
+          <Property Type="Double" Name="Quantity" Nullable="false" />
+          <Property Type="String" Name="UserKey" Nullable="false" MaxLength="36" />
+          <Property Type="DateTime" Name="Modified" Nullable="false" />
+          <NavigationProperty Name="Goods" Relationship="LogicLibary.GoodsChanged" FromRole="ChangedSet" ToRole="Goods" />
+        </EntityType>
+        <Association Name="GoodsUnitGoods">
+          <End Type="LogicLibary.GoodsUnit" Role="GoodsUnit" Multiplicity="1" />
+          <End Type="LogicLibary.Goods" Role="Goods" Multiplicity="*" />
+        </Association>
+        <Association Name="BrandGoods">
+          <End Type="LogicLibary.Brand" Role="Brand" Multiplicity="1" />
+          <End Type="LogicLibary.Goods" Role="Goods" Multiplicity="*" />
+        </Association>
+        <Association Name="GoodsChanged">
+          <End Type="LogicLibary.Goods" Role="Goods" Multiplicity="1" />
+          <End Type="LogicLibary.Changed" Role="ChangedSet" Multiplicity="*" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="LogicLibaryStoreContainer" CdmEntityContainer="StoreEntities">
+    <EntitySetMapping Name="GoodsSet">
+      <EntityTypeMapping TypeName="IsTypeOf(LogicLibary.Goods)">
+        <MappingFragment StoreEntitySet="GoodsSet">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="GoodsName" ColumnName="GoodsName" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="UserKey" ColumnName="UserKey" />
+          <ScalarProperty Name="Modified" ColumnName="Modified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GoodsUnitSet">
+      <EntityTypeMapping TypeName="IsTypeOf(LogicLibary.GoodsUnit)">
+        <MappingFragment StoreEntitySet="GoodsUnitSet">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="UnitName" ColumnName="UnitName" />
+          <ScalarProperty Name="UserKey" ColumnName="UserKey" />
+          <ScalarProperty Name="Modified" ColumnName="Modified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrderBodySet">
+      <EntityTypeMapping TypeName="IsTypeOf(LogicLibary.OrderBody)">
+        <MappingFragment StoreEntitySet="OrderBodySet">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrderHeadSet">
+      <EntityTypeMapping TypeName="IsTypeOf(LogicLibary.OrderHead)">
+        <MappingFragment StoreEntitySet="OrderHeadSet">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Buyer" ColumnName="Buyer" />
+          <ScalarProperty Name="Sum" ColumnName="Sum" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BrandSet">
+      <EntityTypeMapping TypeName="IsTypeOf(LogicLibary.Brand)">
+        <MappingFragment StoreEntitySet="BrandSet">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+          <ScalarProperty Name="UserKey" ColumnName="UserKey" />
+          <ScalarProperty Name="Modified" ColumnName="Modified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ChangedSet">
+      <EntityTypeMapping TypeName="IsTypeOf(LogicLibary.Changed)">
+        <MappingFragment StoreEntitySet="ChangedSet">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Value" ColumnName="Value" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="UserKey" ColumnName="UserKey" />
+          <ScalarProperty Name="Modified" ColumnName="Modified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="OrderHeadOrderBodySet" TypeName="LogicLibary.OrderHeadOrderBodySet" StoreEntitySet="OrderBodySet">
+      <EndProperty Name="OrderHead">
+        <ScalarProperty Name="ID" ColumnName="OrderHead_ID" />
+      </EndProperty>
+      <EndProperty Name="OrderBodySet">
+        <ScalarProperty Name="ID" ColumnName="ID" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="ChildBrand" TypeName="LogicLibary.BrandInBrand" StoreEntitySet="BrandSet">
+      <EndProperty Name="Brand">
+        <ScalarProperty Name="ID" ColumnName="RootBrand_ID" />
+      </EndProperty>
+      <EndProperty Name="ChildBrand">
+        <ScalarProperty Name="ID" ColumnName="ID" />
+      </EndProperty>
+      <Condition ColumnName="RootBrand_ID" IsNull="false" />
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="GoodsUnitGoods" TypeName="LogicLibary.GoodsUnitGoods" StoreEntitySet="GoodsSet">
+      <EndProperty Name="GoodsUnit">
+        <ScalarProperty Name="ID" ColumnName="Unit_ID" />
+      </EndProperty>
+      <EndProperty Name="Goods">
+        <ScalarProperty Name="ID" ColumnName="ID" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="BrandGoods" TypeName="LogicLibary.BrandGoods" StoreEntitySet="GoodsSet">
+      <EndProperty Name="Brand">
+        <ScalarProperty Name="ID" ColumnName="Brand_ID" />
+      </EndProperty>
+      <EndProperty Name="Goods">
+        <ScalarProperty Name="ID" ColumnName="ID" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="GoodsChanged" TypeName="LogicLibary.GoodsChanged" StoreEntitySet="ChangedSet">
+      <EndProperty Name="Goods">
+        <ScalarProperty Name="ID" ColumnName="Goods_ID" />
+      </EndProperty>
+      <EndProperty Name="ChangedSet">
+        <ScalarProperty Name="ID" ColumnName="ID" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="StoreDb">
+        <EntityTypeShape EntityType="LogicLibary.Goods" Width="1.5" PointX="3.5" PointY="0.75" Height="1.9210009765625" IsExpanded="true" />
+        <EntityTypeShape EntityType="LogicLibary.GoodsUnit" Width="1.5" PointX="1.25" PointY="0.875" Height="1.7566536458333339" IsExpanded="true" />
+        <EntityTypeShape EntityType="LogicLibary.OrderBody" Width="1.5" PointX="0.625" PointY="6" Height="1.4279589843749996" />
+        <EntityTypeShape EntityType="LogicLibary.OrderHead" Width="1.5" PointX="2.5" PointY="5.875" Height="1.7566536458333335" />
+        <AssociationConnector Association="LogicLibary.OrderHeadOrderBodySet">
+          <ConnectorPoint PointX="2.5" PointY="6.7139794921875" />
+          <ConnectorPoint PointX="2.125" PointY="6.7139794921875" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="LogicLibary.Brand" Width="1.5" PointX="5.625" PointY="0.75" Height="2.085348307291667" />
+        <AssociationConnector Association="LogicLibary.BrandInBrand">
+          <ConnectorPoint PointX="6.1569230769230767" PointY="2.835348307291667" />
+          <ConnectorPoint PointX="6.1569230769230767" PointY="3.0853483072916674" />
+          <ConnectorPoint PointX="6.6034615384615378" PointY="3.0853483072916674" />
+          <ConnectorPoint PointX="6.6034615384615378" PointY="2.835348307291667" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="LogicLibary.Changed" Width="1.5" PointX="3.5" PointY="3.375" Height="2.0853483072916665" />
+        <AssociationConnector Association="LogicLibary.GoodsUnitGoods">
+          <ConnectorPoint PointX="2.75" PointY="1.753326822916667" />
+          <ConnectorPoint PointX="3.5" PointY="1.753326822916667" />
+        </AssociationConnector>
+        <AssociationConnector Association="LogicLibary.BrandGoods">
+          <ConnectorPoint PointX="5.625" PointY="1.7926741536458331" />
+          <ConnectorPoint PointX="5" PointY="1.7926741536458331" />
+        </AssociationConnector>
+        <AssociationConnector Association="LogicLibary.GoodsChanged">
+          <ConnectorPoint PointX="4.25" PointY="2.9996956380208331" />
+          <ConnectorPoint PointX="4.25" PointY="3.375" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
