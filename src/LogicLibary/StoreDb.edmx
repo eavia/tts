@@ -420,7 +420,7 @@
           <ConnectorPoint PointX="6.6034615384615378" PointY="2.8353483072916674" />
           <ConnectorPoint PointX="6.6034615384615378" PointY="2.585348307291667" />
         </AssociationConnector>
-        <EntityTypeShape EntityType="LogicLibary.Changed" Width="1.5" PointX="3.5" PointY="3.25" Height="2.0853483072916665" />
+        <EntityTypeShape EntityType="LogicLibary.Changed" Width="1.5" PointX="3.5" PointY="3.625" Height="2.3520719401041665" />
         <AssociationConnector Association="LogicLibary.GoodsUnitGoods">
           <ConnectorPoint PointX="2.75" PointY="1.46050048828125" />
           <ConnectorPoint PointX="3.5" PointY="1.46050048828125" />
@@ -430,8 +430,8 @@
           <ConnectorPoint PointX="5" PointY="1.5426741536458337" />
         </AssociationConnector>
         <AssociationConnector Association="LogicLibary.GoodsChanged">
-          <ConnectorPoint PointX="4.25" PointY="2.91404296875" />
-          <ConnectorPoint PointX="4.25" PointY="3.25" />
+          <ConnectorPoint PointX="4.25" PointY="3.234111328125" />
+          <ConnectorPoint PointX="4.25" PointY="3.625" />
         </AssociationConnector>
       </Diagram>
     </Diagrams>

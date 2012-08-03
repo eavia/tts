@@ -22,7 +22,8 @@ namespace LogicLibary.GoodsManager
             try
             {
                 g.Modified = DateTime.Now;
-                this.ObjectContext.GoodsSet.Attach(g);
+                this.ObjectContext.GoodsSet.AddObject(g);
+                ObjectContext.SaveChanges();
                 return true;
             }
             catch (System.Exception ex)
