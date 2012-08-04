@@ -17,32 +17,32 @@ namespace TaobaoTesting
         string SessionKey;
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
-            {
-                //SessionKey = (Session["SessionKey"] ?? "NaN").ToString();
-                //if (SessionKey.Equals("NaN"))
-                //{
-                //    HttpCookie coo = Request.Cookies["SessionKeyCoo"];
-                //    if (coo != null)
-                //    {
-                //        Session.Add("SessionKey", coo.Value);
-                //        SessionKey = coo.Value;
-                //    }
-                //    if (string.IsNullOrEmpty(SessionKey) || SessionKey == "NaN")
-                //    {
-                //        StringBuilder path = new StringBuilder(@"http://container.api.tbsandbox.com/container?appkey={appkey}&encode=utf-8 ");
-                //        path.Replace("{appkey}", TaobaoTesting.Global.AppKey);
-                //        Response.Redirect(path.ToString());
-                //    }
-                //}
-                //else
-                //{
-                //    HttpCookie coo = new HttpCookie("SessionKeyCoo");
-                //    coo.Value = SessionKey;
-                //    coo.Expires = DateTime.Now.AddMinutes(5);
-                //    Response.Cookies.Add(coo);
-                //}
-            }
+            //if (!IsPostBack)
+            //{
+            //    SessionKey = (Session["SessionKey"] ?? "NaN").ToString();
+            //    if (SessionKey.Equals("NaN"))
+            //    {
+            //        HttpCookie coo = Request.Cookies["SessionKeyCoo"];
+            //        if (coo != null)
+            //        {
+            //            Session.Add("SessionKey", coo.Value);
+            //            SessionKey = coo.Value;
+            //        }
+            //        if (string.IsNullOrEmpty(SessionKey) || SessionKey == "NaN")
+            //        {
+            //            StringBuilder path = new StringBuilder(@"http://container.api.tbsandbox.com/container?appkey={appkey}&encode=utf-8 ");
+            //            path.Replace("{appkey}", TaobaoTesting.Global.AppKey);
+            //            Response.Redirect(path.ToString());
+            //        }
+            //    }
+            //    else
+            //    {
+            //        HttpCookie coo = new HttpCookie("SessionKeyCoo");
+            //        coo.Value = SessionKey;
+            //        coo.Expires = DateTime.Now.AddMinutes(5);
+            //        Response.Cookies.Add(coo);
+            //    }
+            //}
         }
 
         private void GetGoods()

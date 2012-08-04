@@ -19,10 +19,10 @@ using System.Runtime.Serialization;
 #region EDM 关系源元数据
 
 [assembly: EdmRelationshipAttribute("LogicLibary", "OrderHeadOrderBodySet", "OrderHead", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LogicLibary.OrderHead), "OrderBodySet", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LogicLibary.OrderBody))]
-[assembly: EdmRelationshipAttribute("LogicLibary", "BrandInBrand", "Brand", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LogicLibary.Brand), "ChildBrand", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LogicLibary.Brand))]
 [assembly: EdmRelationshipAttribute("LogicLibary", "GoodsUnitGoods", "GoodsUnit", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LogicLibary.GoodsUnit), "Goods", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LogicLibary.Goods))]
 [assembly: EdmRelationshipAttribute("LogicLibary", "BrandGoods", "Brand", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LogicLibary.Brand), "Goods", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LogicLibary.Goods))]
 [assembly: EdmRelationshipAttribute("LogicLibary", "GoodsChanged", "Goods", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LogicLibary.Goods), "ChangedSet", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LogicLibary.Changed))]
+[assembly: EdmRelationshipAttribute("LogicLibary", "BrandBrand", "Brand", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LogicLibary.Brand), "ChildBrand", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LogicLibary.Brand))]
 
 #endregion
 
@@ -77,38 +77,6 @@ namespace LogicLibary
         /// <summary>
         /// 没有元数据文档可用。
         /// </summary>
-        public ObjectSet<Goods> GoodsSet
-        {
-            get
-            {
-                if ((_GoodsSet == null))
-                {
-                    _GoodsSet = base.CreateObjectSet<Goods>("GoodsSet");
-                }
-                return _GoodsSet;
-            }
-        }
-        private ObjectSet<Goods> _GoodsSet;
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        public ObjectSet<GoodsUnit> GoodsUnitSet
-        {
-            get
-            {
-                if ((_GoodsUnitSet == null))
-                {
-                    _GoodsUnitSet = base.CreateObjectSet<GoodsUnit>("GoodsUnitSet");
-                }
-                return _GoodsUnitSet;
-            }
-        }
-        private ObjectSet<GoodsUnit> _GoodsUnitSet;
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
         public ObjectSet<OrderBody> OrderBodySet
         {
             get
@@ -141,53 +109,21 @@ namespace LogicLibary
         /// <summary>
         /// 没有元数据文档可用。
         /// </summary>
-        public ObjectSet<Brand> BrandSet
+        public ObjectSet<Entity> EntitySet
         {
             get
             {
-                if ((_BrandSet == null))
+                if ((_EntitySet == null))
                 {
-                    _BrandSet = base.CreateObjectSet<Brand>("BrandSet");
+                    _EntitySet = base.CreateObjectSet<Entity>("EntitySet");
                 }
-                return _BrandSet;
+                return _EntitySet;
             }
         }
-        private ObjectSet<Brand> _BrandSet;
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        public ObjectSet<Changed> ChangedSet
-        {
-            get
-            {
-                if ((_ChangedSet == null))
-                {
-                    _ChangedSet = base.CreateObjectSet<Changed>("ChangedSet");
-                }
-                return _ChangedSet;
-            }
-        }
-        private ObjectSet<Changed> _ChangedSet;
+        private ObjectSet<Entity> _EntitySet;
 
         #endregion
         #region AddTo 方法
-    
-        /// <summary>
-        /// 用于向 GoodsSet EntitySet 添加新对象的方法，已弃用。请考虑改用关联的 ObjectSet&lt;T&gt; 属性的 .Add 方法。
-        /// </summary>
-        public void AddToGoodsSet(Goods goods)
-        {
-            base.AddObject("GoodsSet", goods);
-        }
-    
-        /// <summary>
-        /// 用于向 GoodsUnitSet EntitySet 添加新对象的方法，已弃用。请考虑改用关联的 ObjectSet&lt;T&gt; 属性的 .Add 方法。
-        /// </summary>
-        public void AddToGoodsUnitSet(GoodsUnit goodsUnit)
-        {
-            base.AddObject("GoodsUnitSet", goodsUnit);
-        }
     
         /// <summary>
         /// 用于向 OrderBodySet EntitySet 添加新对象的方法，已弃用。请考虑改用关联的 ObjectSet&lt;T&gt; 属性的 .Add 方法。
@@ -206,19 +142,11 @@ namespace LogicLibary
         }
     
         /// <summary>
-        /// 用于向 BrandSet EntitySet 添加新对象的方法，已弃用。请考虑改用关联的 ObjectSet&lt;T&gt; 属性的 .Add 方法。
+        /// 用于向 EntitySet EntitySet 添加新对象的方法，已弃用。请考虑改用关联的 ObjectSet&lt;T&gt; 属性的 .Add 方法。
         /// </summary>
-        public void AddToBrandSet(Brand brand)
+        public void AddToEntitySet(Entity entity)
         {
-            base.AddObject("BrandSet", brand);
-        }
-    
-        /// <summary>
-        /// 用于向 ChangedSet EntitySet 添加新对象的方法，已弃用。请考虑改用关联的 ObjectSet&lt;T&gt; 属性的 .Add 方法。
-        /// </summary>
-        public void AddToChangedSet(Changed changed)
-        {
-            base.AddObject("ChangedSet", changed);
+            base.AddObject("EntitySet", entity);
         }
 
         #endregion
@@ -235,7 +163,7 @@ namespace LogicLibary
     [EdmEntityTypeAttribute(NamespaceName="LogicLibary", Name="Brand")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
-    public partial class Brand : EntityObject
+    public partial class Brand : Entity
     {
         #region 工厂方法
     
@@ -243,48 +171,21 @@ namespace LogicLibary
         /// 创建新的 Brand 对象。
         /// </summary>
         /// <param name="id">ID 属性的初始值。</param>
-        /// <param name="brandName">BrandName 属性的初始值。</param>
         /// <param name="userKey">UserKey 属性的初始值。</param>
         /// <param name="modified">Modified 属性的初始值。</param>
-        public static Brand CreateBrand(global::System.Int32 id, global::System.String brandName, global::System.String userKey, global::System.DateTime modified)
+        /// <param name="brandName">BrandName 属性的初始值。</param>
+        public static Brand CreateBrand(global::System.Int32 id, global::System.String userKey, global::System.DateTime modified, global::System.String brandName)
         {
             Brand brand = new Brand();
             brand.ID = id;
-            brand.BrandName = brandName;
             brand.UserKey = userKey;
             brand.Modified = modified;
+            brand.BrandName = brandName;
             return brand;
         }
 
         #endregion
         #region 基元属性
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int32 ID
-        {
-            get
-            {
-                return _ID;
-            }
-            set
-            {
-                if (_ID != value)
-                {
-                    OnIDChanging(value);
-                    ReportPropertyChanging("ID");
-                    _ID = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("ID");
-                    OnIDChanged();
-                }
-            }
-        }
-        private global::System.Int32 _ID;
-        partial void OnIDChanging(global::System.Int32 value);
-        partial void OnIDChanged();
     
         /// <summary>
         /// 没有元数据文档可用。
@@ -309,118 +210,10 @@ namespace LogicLibary
         private global::System.String _BrandName;
         partial void OnBrandNameChanging(global::System.String value);
         partial void OnBrandNameChanged();
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String UserKey
-        {
-            get
-            {
-                return _UserKey;
-            }
-            set
-            {
-                OnUserKeyChanging(value);
-                ReportPropertyChanging("UserKey");
-                _UserKey = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("UserKey");
-                OnUserKeyChanged();
-            }
-        }
-        private global::System.String _UserKey;
-        partial void OnUserKeyChanging(global::System.String value);
-        partial void OnUserKeyChanged();
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.DateTime Modified
-        {
-            get
-            {
-                return _Modified;
-            }
-            set
-            {
-                OnModifiedChanging(value);
-                ReportPropertyChanging("Modified");
-                _Modified = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Modified");
-                OnModifiedChanged();
-            }
-        }
-        private global::System.DateTime _Modified;
-        partial void OnModifiedChanging(global::System.DateTime value);
-        partial void OnModifiedChanged();
 
         #endregion
     
         #region 导航属性
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("LogicLibary", "BrandInBrand", "ChildBrand")]
-        public EntityCollection<Brand> ChildBrandSet
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Brand>("LogicLibary.BrandInBrand", "ChildBrand");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Brand>("LogicLibary.BrandInBrand", "ChildBrand", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("LogicLibary", "BrandInBrand", "Brand")]
-        public Brand RootBrand
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Brand>("LogicLibary.BrandInBrand", "Brand").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Brand>("LogicLibary.BrandInBrand", "Brand").Value = value;
-            }
-        }
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<Brand> RootBrandReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Brand>("LogicLibary.BrandInBrand", "Brand");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Brand>("LogicLibary.BrandInBrand", "Brand", value);
-                }
-            }
-        }
     
         /// <summary>
         /// 没有元数据文档可用。
@@ -443,6 +236,66 @@ namespace LogicLibary
                 }
             }
         }
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LogicLibary", "BrandBrand", "ChildBrand")]
+        public Brand RootBrand
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Brand>("LogicLibary.BrandBrand", "ChildBrand").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Brand>("LogicLibary.BrandBrand", "ChildBrand").Value = value;
+            }
+        }
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<Brand> RootBrandReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Brand>("LogicLibary.BrandBrand", "ChildBrand");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Brand>("LogicLibary.BrandBrand", "ChildBrand", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LogicLibary", "BrandBrand", "Brand")]
+        public EntityCollection<Brand> ChildBrandSet
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Brand>("LogicLibary.BrandBrand", "Brand");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Brand>("LogicLibary.BrandBrand", "Brand", value);
+                }
+            }
+        }
 
         #endregion
     }
@@ -453,7 +306,7 @@ namespace LogicLibary
     [EdmEntityTypeAttribute(NamespaceName="LogicLibary", Name="Changed")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
-    public partial class Changed : EntityObject
+    public partial class Changed : Entity
     {
         #region 工厂方法
     
@@ -461,52 +314,25 @@ namespace LogicLibary
         /// 创建新的 Changed 对象。
         /// </summary>
         /// <param name="id">ID 属性的初始值。</param>
+        /// <param name="userKey">UserKey 属性的初始值。</param>
+        /// <param name="modified">Modified 属性的初始值。</param>
         /// <param name="value">Value 属性的初始值。</param>
         /// <param name="date">Date 属性的初始值。</param>
         /// <param name="quantity">Quantity 属性的初始值。</param>
-        /// <param name="userKey">UserKey 属性的初始值。</param>
-        /// <param name="modified">Modified 属性的初始值。</param>
-        public static Changed CreateChanged(global::System.Int32 id, global::System.Double value, global::System.DateTime date, global::System.Double quantity, global::System.String userKey, global::System.DateTime modified)
+        public static Changed CreateChanged(global::System.Int32 id, global::System.String userKey, global::System.DateTime modified, global::System.Double value, global::System.DateTime date, global::System.Double quantity)
         {
             Changed changed = new Changed();
             changed.ID = id;
+            changed.UserKey = userKey;
+            changed.Modified = modified;
             changed.Value = value;
             changed.Date = date;
             changed.Quantity = quantity;
-            changed.UserKey = userKey;
-            changed.Modified = modified;
             return changed;
         }
 
         #endregion
         #region 基元属性
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int32 ID
-        {
-            get
-            {
-                return _ID;
-            }
-            set
-            {
-                if (_ID != value)
-                {
-                    OnIDChanging(value);
-                    ReportPropertyChanging("ID");
-                    _ID = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("ID");
-                    OnIDChanged();
-                }
-            }
-        }
-        private global::System.Int32 _ID;
-        partial void OnIDChanging(global::System.Int32 value);
-        partial void OnIDChanged();
     
         /// <summary>
         /// 没有元数据文档可用。
@@ -579,54 +405,6 @@ namespace LogicLibary
         private global::System.Double _Quantity;
         partial void OnQuantityChanging(global::System.Double value);
         partial void OnQuantityChanged();
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String UserKey
-        {
-            get
-            {
-                return _UserKey;
-            }
-            set
-            {
-                OnUserKeyChanging(value);
-                ReportPropertyChanging("UserKey");
-                _UserKey = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("UserKey");
-                OnUserKeyChanged();
-            }
-        }
-        private global::System.String _UserKey;
-        partial void OnUserKeyChanging(global::System.String value);
-        partial void OnUserKeyChanged();
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.DateTime Modified
-        {
-            get
-            {
-                return _Modified;
-            }
-            set
-            {
-                OnModifiedChanging(value);
-                ReportPropertyChanging("Modified");
-                _Modified = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Modified");
-                OnModifiedChanged();
-            }
-        }
-        private global::System.DateTime _Modified;
-        partial void OnModifiedChanging(global::System.DateTime value);
-        partial void OnModifiedChanged();
 
         #endregion
     
@@ -676,33 +454,15 @@ namespace LogicLibary
     /// <summary>
     /// 没有元数据文档可用。
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="LogicLibary", Name="Goods")]
+    [EdmEntityTypeAttribute(NamespaceName="LogicLibary", Name="Entity")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
-    public partial class Goods : EntityObject
+    [KnownTypeAttribute(typeof(GoodsUnit))]
+    [KnownTypeAttribute(typeof(Goods))]
+    [KnownTypeAttribute(typeof(Brand))]
+    [KnownTypeAttribute(typeof(Changed))]
+    public abstract partial class Entity : EntityObject
     {
-        #region 工厂方法
-    
-        /// <summary>
-        /// 创建新的 Goods 对象。
-        /// </summary>
-        /// <param name="id">ID 属性的初始值。</param>
-        /// <param name="goodsName">GoodsName 属性的初始值。</param>
-        /// <param name="quantity">Quantity 属性的初始值。</param>
-        /// <param name="userKey">UserKey 属性的初始值。</param>
-        /// <param name="modified">Modified 属性的初始值。</param>
-        public static Goods CreateGoods(global::System.Int32 id, global::System.String goodsName, global::System.Double quantity, global::System.String userKey, global::System.DateTime modified)
-        {
-            Goods goods = new Goods();
-            goods.ID = id;
-            goods.GoodsName = goodsName;
-            goods.Quantity = quantity;
-            goods.UserKey = userKey;
-            goods.Modified = modified;
-            return goods;
-        }
-
-        #endregion
         #region 基元属性
     
         /// <summary>
@@ -731,54 +491,6 @@ namespace LogicLibary
         private global::System.Int32 _ID;
         partial void OnIDChanging(global::System.Int32 value);
         partial void OnIDChanged();
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String GoodsName
-        {
-            get
-            {
-                return _GoodsName;
-            }
-            set
-            {
-                OnGoodsNameChanging(value);
-                ReportPropertyChanging("GoodsName");
-                _GoodsName = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("GoodsName");
-                OnGoodsNameChanged();
-            }
-        }
-        private global::System.String _GoodsName;
-        partial void OnGoodsNameChanging(global::System.String value);
-        partial void OnGoodsNameChanged();
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Double Quantity
-        {
-            get
-            {
-                return _Quantity;
-            }
-            set
-            {
-                OnQuantityChanging(value);
-                ReportPropertyChanging("Quantity");
-                _Quantity = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Quantity");
-                OnQuantityChanged();
-            }
-        }
-        private global::System.Double _Quantity;
-        partial void OnQuantityChanging(global::System.Double value);
-        partial void OnQuantityChanged();
     
         /// <summary>
         /// 没有元数据文档可用。
@@ -827,6 +539,90 @@ namespace LogicLibary
         private global::System.DateTime _Modified;
         partial void OnModifiedChanging(global::System.DateTime value);
         partial void OnModifiedChanged();
+
+        #endregion
+    
+    }
+    
+    /// <summary>
+    /// 没有元数据文档可用。
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="LogicLibary", Name="Goods")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class Goods : Entity
+    {
+        #region 工厂方法
+    
+        /// <summary>
+        /// 创建新的 Goods 对象。
+        /// </summary>
+        /// <param name="id">ID 属性的初始值。</param>
+        /// <param name="userKey">UserKey 属性的初始值。</param>
+        /// <param name="modified">Modified 属性的初始值。</param>
+        /// <param name="goodsName">GoodsName 属性的初始值。</param>
+        /// <param name="quantity">Quantity 属性的初始值。</param>
+        public static Goods CreateGoods(global::System.Int32 id, global::System.String userKey, global::System.DateTime modified, global::System.String goodsName, global::System.Double quantity)
+        {
+            Goods goods = new Goods();
+            goods.ID = id;
+            goods.UserKey = userKey;
+            goods.Modified = modified;
+            goods.GoodsName = goodsName;
+            goods.Quantity = quantity;
+            return goods;
+        }
+
+        #endregion
+        #region 基元属性
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String GoodsName
+        {
+            get
+            {
+                return _GoodsName;
+            }
+            set
+            {
+                OnGoodsNameChanging(value);
+                ReportPropertyChanging("GoodsName");
+                _GoodsName = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("GoodsName");
+                OnGoodsNameChanged();
+            }
+        }
+        private global::System.String _GoodsName;
+        partial void OnGoodsNameChanging(global::System.String value);
+        partial void OnGoodsNameChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double Quantity
+        {
+            get
+            {
+                return _Quantity;
+            }
+            set
+            {
+                OnQuantityChanging(value);
+                ReportPropertyChanging("Quantity");
+                _Quantity = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Quantity");
+                OnQuantityChanged();
+            }
+        }
+        private global::System.Double _Quantity;
+        partial void OnQuantityChanging(global::System.Double value);
+        partial void OnQuantityChanged();
     
         /// <summary>
         /// 没有元数据文档可用。
@@ -963,7 +759,7 @@ namespace LogicLibary
     [EdmEntityTypeAttribute(NamespaceName="LogicLibary", Name="GoodsUnit")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
-    public partial class GoodsUnit : EntityObject
+    public partial class GoodsUnit : Entity
     {
         #region 工厂方法
     
@@ -971,48 +767,21 @@ namespace LogicLibary
         /// 创建新的 GoodsUnit 对象。
         /// </summary>
         /// <param name="id">ID 属性的初始值。</param>
-        /// <param name="unitName">UnitName 属性的初始值。</param>
         /// <param name="userKey">UserKey 属性的初始值。</param>
         /// <param name="modified">Modified 属性的初始值。</param>
-        public static GoodsUnit CreateGoodsUnit(global::System.Int32 id, global::System.String unitName, global::System.String userKey, global::System.DateTime modified)
+        /// <param name="unitName">UnitName 属性的初始值。</param>
+        public static GoodsUnit CreateGoodsUnit(global::System.Int32 id, global::System.String userKey, global::System.DateTime modified, global::System.String unitName)
         {
             GoodsUnit goodsUnit = new GoodsUnit();
             goodsUnit.ID = id;
-            goodsUnit.UnitName = unitName;
             goodsUnit.UserKey = userKey;
             goodsUnit.Modified = modified;
+            goodsUnit.UnitName = unitName;
             return goodsUnit;
         }
 
         #endregion
         #region 基元属性
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int32 ID
-        {
-            get
-            {
-                return _ID;
-            }
-            set
-            {
-                if (_ID != value)
-                {
-                    OnIDChanging(value);
-                    ReportPropertyChanging("ID");
-                    _ID = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("ID");
-                    OnIDChanged();
-                }
-            }
-        }
-        private global::System.Int32 _ID;
-        partial void OnIDChanging(global::System.Int32 value);
-        partial void OnIDChanged();
     
         /// <summary>
         /// 没有元数据文档可用。
@@ -1037,54 +806,6 @@ namespace LogicLibary
         private global::System.String _UnitName;
         partial void OnUnitNameChanging(global::System.String value);
         partial void OnUnitNameChanged();
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.String UserKey
-        {
-            get
-            {
-                return _UserKey;
-            }
-            set
-            {
-                OnUserKeyChanging(value);
-                ReportPropertyChanging("UserKey");
-                _UserKey = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("UserKey");
-                OnUserKeyChanged();
-            }
-        }
-        private global::System.String _UserKey;
-        partial void OnUserKeyChanging(global::System.String value);
-        partial void OnUserKeyChanged();
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.DateTime Modified
-        {
-            get
-            {
-                return _Modified;
-            }
-            set
-            {
-                OnModifiedChanging(value);
-                ReportPropertyChanging("Modified");
-                _Modified = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Modified");
-                OnModifiedChanged();
-            }
-        }
-        private global::System.DateTime _Modified;
-        partial void OnModifiedChanging(global::System.DateTime value);
-        partial void OnModifiedChanged();
     
         /// <summary>
         /// 没有元数据文档可用。

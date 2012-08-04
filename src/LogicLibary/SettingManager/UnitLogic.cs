@@ -19,12 +19,12 @@ namespace LogicLibary.SettingManager
 
         public IQueryable<GoodsUnit> GetUnitList()
         {
-            return this.ObjectContext.GoodsUnitSet;
+            return this.ObjectContext.EntitySet.OfType<GoodsUnit>();
         }
 
         public IQueryable<GoodsUnit> GetUnitList(bool e)
         {
-            return this.ObjectContext.GoodsUnitSet.Where(u => u.Enable.Equals(e));
+            return this.ObjectContext.EntitySet.OfType<GoodsUnit>().Where(u => u.Enable.Equals(e));
         }
 
         public GoodsUnit GetUnitByID(int id)
@@ -32,7 +32,7 @@ namespace LogicLibary.SettingManager
             GoodsUnit gu = null;
             try
             {
-                gu = this.ObjectContext.GoodsUnitSet.Single(u => u.ID.Equals(id));
+                gu = this.ObjectContext.EntitySet.OfType<GoodsUnit>().Single(u => u.ID.Equals(id));
             }
             catch (System.Exception ex)
             {
@@ -45,8 +45,8 @@ namespace LogicLibary.SettingManager
         {
             try
             {
-                GoodsUnit gu = this.ObjectContext.GoodsUnitSet.Single(x => x.ID.Equals(ID));
-                this.ObjectContext.GoodsUnitSet.DeleteObject(gu);
+                GoodsUnit gu = this.ObjectContext.EntitySet.OfType<GoodsUnit>().Single(x => x.ID.Equals(ID));
+                this.ObjectContext.EntitySet.DeleteObject(gu);
                 this.ObjectContext.SaveChanges();
                 return true;
             }
@@ -61,10 +61,8 @@ namespace LogicLibary.SettingManager
         {
             try
             {
-                GoodsUnit gu = this.ObjectContext.GoodsUnitSet.Single(x => x.ID.Equals(uid));
+                GoodsUnit gu = this.ObjectContext.EntitySet.OfType<GoodsUnit>().Single(x => x.ID.Equals(uid));
                 gu.Enable = isenabled;
-                gu.Modified = DateTime.Now;
-                gu.UserKey = this.ContextUserKey;
                 this.ObjectContext.SaveChanges();
                 return true;
             }
@@ -82,16 +80,14 @@ namespace LogicLibary.SettingManager
 
         public bool CreateUnit(string name, bool e)
         {
-            if (this.ObjectContext.GoodsUnitSet.Where(X => X.UnitName.Equals(name)).Count()==0)
+            if (this.ObjectContext.EntitySet.OfType<GoodsUnit>().Where(X => X.UnitName.Equals(name)).Count() == 0)
             {
                 try
                 {
-                    this.ObjectContext.GoodsUnitSet.AddObject(new GoodsUnit()
+                    this.ObjectContext.EntitySet.AddObject(new GoodsUnit()
                     {
                         UnitName = name,
-                        Enable = e,
-                        UserKey = this.ContextUserKey,
-                        Modified = DateTime.Now
+                        Enable = e
                     });
                     this.ObjectContext.SaveChanges();
                     return true;

@@ -22,7 +22,7 @@ namespace LogicLibary.GoodsManager
             try
             {
                 g.Modified = DateTime.Now;
-                this.ObjectContext.GoodsSet.AddObject(g);
+                this.ObjectContext.EntitySet.AddObject(g);
                 ObjectContext.SaveChanges();
                 return true;
             }
@@ -35,14 +35,14 @@ namespace LogicLibary.GoodsManager
 
         public IQueryable<Goods> GetGoodsWithBrandID(int id)
         {
-            return from g in this.ObjectContext.GoodsSet
+            return from g in this.ObjectContext.EntitySet.OfType<Goods>()
                    where g.Brand.ID.Equals(id) && g.UserKey.Equals(this.ContextUserKey)
                    select g;
         }
 
         public IQueryable<Goods> GetGoodsList()
         {
-            return from g in this.ObjectContext.GoodsSet
+            return from g in this.ObjectContext.EntitySet.OfType<Goods>()
                    where g.UserKey.Equals(this.ContextUserKey)
                    select g;
         }
@@ -52,7 +52,7 @@ namespace LogicLibary.GoodsManager
             Goods g = null;
             try
             {
-                g = this.ObjectContext.GoodsSet.Single(gg => gg.ID.Equals(goodsid) && gg.UserKey.Equals(this.ContextUserKey));
+                g = this.ObjectContext.EntitySet.OfType<Goods>().Single(gg => gg.ID.Equals(goodsid) && gg.UserKey.Equals(this.ContextUserKey));
             }
             catch
             {
