@@ -19,7 +19,6 @@ namespace LogicLibary.GoodsManager
             {
                 using (TransactionScope scope = new TransactionScope())
                 {
-                    c.Modified = DateTime.Now;
                     g.ChangedSet.Add(c);
                     g.Quantity = g.Quantity + c.Value;
                     this.ObjectContext.SaveChanges(SaveOptions.None);

@@ -113,7 +113,6 @@ namespace TaobaoTesting.GoodsManager
                 hfdSeletedIndex.Value = e.Item.ItemIndex.ToString();
                 DataListItem item = dl.Items[e.Item.ItemIndex];
                 ShowChangedList(item, itemId);
-                //BindChangeListByGID(itemId);
             }
         }
         private void BindInternalChangedList(DataListItem it, string itemId)
@@ -172,60 +171,12 @@ namespace TaobaoTesting.GoodsManager
                     }
                 }
             }
-        }
-
-        private void BindChangeListByGID(string goodsid)
-        {
-            List<PageChange> lst = new List<PageChange>();
-            int gid = int.Parse(goodsid);
-            Goods goods = glogic.GetGoodsByID(gid);
-            foreach (Changed cd in goods.ChangedSet)
+            else if (e.CommandName == "Hide")
             {
-                PageChange pc = new PageChange();
-                pc.ChangedId = cd.ID;
-                pc.GoodsId = gid;
-                pc.Value = cd.Value;
-                pc.Quantity = cd.Quantity;
-                pc.Date = cd.Date;
-                lst.Add(pc);
-            }
-            PageChange empty = new PageChange();
-            empty.ChangedId = -1;
-            empty.GoodsId = gid;
-            empty.Quantity = goods.Quantity;
-            empty.Value = 0;
-            empty.Date = DateTime.Now;
-            lst.Add(empty);
-            //this.dlChanged.DataSource = lst;
-            //this.dlChanged.EditItemIndex = lst.Count - 1;
-            //this.dlChanged.DataBind();
-        }
-
-        protected void dlChanged_ItemCommand(object source, DataListCommandEventArgs e)
-        {
-            string itemId = e.CommandArgument.ToString();
-            if (e.CommandName == "Save")
-            {
-                DataList dl = (DataList)source;
                 DataListItem dli = e.Item;
-                dl.SelectedIndex = dli.ItemIndex;
-                TextBox lt = (TextBox)dli.FindControl("txtChangeID");
-                if (lt.Text == "0")
-                {
-                    int goodsid = int.Parse(((HiddenField)dli.FindControl("hfEditGoodsID")).Value);
-                    Goods goods = glogic.GetGoodsList().Single(x => x.ID.Equals(goodsid));
-                    Changed chg = new Changed();
-                    chg.Quantity = double.Parse(((Literal)dli.FindControl("ltaQuantity")).Text);
-                    chg.Value = double.Parse(((TextBox)dli.FindControl("ltaValue")).Text);
-                    string datestring = ((TextBox)dli.FindControl("ltaDate")).Text;
-                    chg.Date = DateTime.Parse(datestring);
-                    chg.UserKey = this.ContextUserKey;
-                    if (logic.AddChangedToGoods(goods, chg))
-                    {
-                        BindGoodsList();
-                        BindChangeListByGID(goodsid.ToString());
-                    }
-                }
+                Control tr = dli.Parent.Parent.Parent;
+                this.hfdSeletedIndex.Value = "-1";
+                tr.Visible = false;
             }
         }
     }

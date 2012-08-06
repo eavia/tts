@@ -58,9 +58,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="StoreDb.edmx.sql" />
-  </ItemGroup>
-  <ItemGroup>
     <EntityDeploy Include="StoreDb.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>StoreDb.Designer.cs</LastGenOutput>

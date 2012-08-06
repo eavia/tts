@@ -17,7 +17,6 @@ namespace LogicLibary.GoodsManager
         {
             try
             {
-                b.Modified = DateTime.Now;
                 this.ObjectContext.EntitySet.AddObject(b);
                 this.ObjectContext.SaveChanges();
                 return true;
