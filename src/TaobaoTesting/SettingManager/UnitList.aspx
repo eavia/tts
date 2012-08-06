@@ -5,8 +5,9 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <div id="pelGoods" style="width: 99%; height: 300px;">
-        <div id="goodstool" style="white-space: nowrap; width: 99%; height: 32px; vertical-align: middle; text-align: center;">
-        <asp:Label ID="title" runat="Server" Text="商品单位名称:"></asp:Label>
+        <div id="goodstool" style="white-space: nowrap; width: 99%; height: 32px; vertical-align: middle;
+            text-align: center;">
+            <asp:Label ID="title" runat="Server" Text="商品单位名称:"></asp:Label>
             <asp:TextBox ID="txtUnitName" runat="server" ValidationGroup="Unit"></asp:TextBox>
             <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="txtUnitName"
                 ErrorMessage="*" ValidationGroup="Unit"></asp:RequiredFieldValidator>
@@ -16,8 +17,10 @@
         </div>
         <div id="goodslst" style="padding: 0px 2px 2px 2px; width: 99%;">
             <asp:DataList Width="99%" ID="dlUnits" runat="server" ExtractTemplateRows="true"
-                CellPadding="2" DataKeyField="ID" GridLines="Both" OnItemCommand="dlUnits_ItemCommand">
-                <ItemStyle ForeColor="Black" />
+                CellPadding="1" DataKeyField="ID" GridLines="Both" OnItemCommand="dlUnits_ItemCommand">
+                <ItemStyle ForeColor="Black"  Height="30px"/>
+                <FooterStyle BackColor="#C6C3C6" ForeColor="Black" />
+                <HeaderStyle BackColor="#A6CBEF" Font-Bold="True" ForeColor="#404040" BorderColor="#A6CBEF"  Height="25px"/>
                 <HeaderTemplate>
                     <asp:Table ID="tabHeader" runat="server">
                         <asp:TableHeaderRow>
@@ -29,14 +32,15 @@
                         </asp:TableHeaderRow>
                     </asp:Table>
                 </HeaderTemplate>
-                <HeaderStyle Height="25px" />
-                <ItemStyle Height="30px" />
                 <ItemTemplate>
                     <asp:Table ID="tabItem" runat="server">
                         <asp:TableRow>
                             <asp:TableCell><%#Container.ItemIndex+1%></asp:TableCell>
-                            <asp:TableCell><asp:Literal ID="lbId" runat="server" Text='<%#Eval("ID")%>'></asp:Literal></asp:TableCell>
-                            <asp:TableCell><asp:CheckBox ID="UnitEnabled" runat="Server" Checked='<%#Eval("Enable")%>' AutoPostBack="true" OnCheckedChanged="CheckBox_CheckedChanged" /></asp:TableCell>
+                            <asp:TableCell>
+                                <asp:Literal ID="lbId" runat="server" Text='<%#Eval("ID")%>'></asp:Literal></asp:TableCell>
+                            <asp:TableCell>
+                                <asp:CheckBox ID="UnitEnabled" runat="Server" Checked='<%#Eval("Enable")%>' AutoPostBack="true"
+                                    OnCheckedChanged="CheckBox_CheckedChanged" /></asp:TableCell>
                             <asp:TableCell><%#Eval("UnitName")%></asp:TableCell>
                             <asp:TableCell>
                                 <asp:LinkButton ID="lnkDelete" runat="server" CommandArgument='<%#Eval("ID")%>' CommandName="Delete">删除</asp:LinkButton>

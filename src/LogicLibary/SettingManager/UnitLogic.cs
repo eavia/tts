@@ -24,7 +24,8 @@ namespace LogicLibary.SettingManager
 
         public IQueryable<GoodsUnit> GetUnitList(bool e)
         {
-            return this.ObjectContext.EntitySet.OfType<GoodsUnit>().Where(u => u.Enable.Equals(e));
+            ObjectParameter p = new ObjectParameter("p", e);
+            return this.ObjectContext.EntitySet.OfType<GoodsUnit>().Where("it.Enable=@p",p);
         }
 
         public GoodsUnit GetUnitByID(int id)

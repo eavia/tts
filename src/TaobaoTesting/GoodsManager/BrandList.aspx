@@ -24,7 +24,10 @@
         <asp:Panel ID="pelList" runat="server">
             <asp:DataList Width="99%" ID="dlGoods" runat="server" ExtractTemplateRows="true"
                 CellPadding="2" DataKeyField="ID" GridLines="Both" OnItemDataBound="dlGoods_ItemDataBound">
-                <ItemStyle ForeColor="Black" />
+                <ItemStyle ForeColor="Black" Height="30px" />
+                <FooterStyle BackColor="#C6C3C6" ForeColor="Black" />
+                <HeaderStyle BackColor="#A6CBEF" Font-Bold="True" ForeColor="#404040" BorderColor="#A6CBEF"
+                    Height="25px" />
                 <HeaderTemplate>
                     <asp:Table ID="tabHeader" runat="server">
                         <asp:TableHeaderRow>

@@ -36,17 +36,17 @@ namespace TaobaoTesting.GoodsManager
                 set { changedId = value; }
             }
 
-            double quantity;
+            decimal quantity;
 
-            public double Quantity
+            public decimal Quantity
             {
                 get { return this.quantity; }
                 set { this.quantity = value; }
             }
 
-            double value;
+            decimal value;
 
-            public double Value
+            public decimal Value
             {
                 get { return this.value; }
                 set { this.value = value; }
@@ -159,8 +159,8 @@ namespace TaobaoTesting.GoodsManager
                     int goodsid = int.Parse(((HiddenField)dli.FindControl("hfEditGoodsID")).Value);
                     Goods goods = glogic.GetGoodsList().Single(x => x.ID.Equals(goodsid));
                     Changed chg = new Changed();
-                    chg.Quantity = double.Parse(((Literal)dli.FindControl("ltaQuantity")).Text);
-                    chg.Value = double.Parse(((TextBox)dli.FindControl("ltaValue")).Text);
+                    chg.Quantity = decimal.Parse(((Literal)dli.FindControl("ltaQuantity")).Text);
+                    chg.Value = decimal.Parse(((TextBox)dli.FindControl("ltaValue")).Text);
                     string datestring = ((TextBox)dli.FindControl("ltaDate")).Text;
                     chg.Date = DateTime.Parse(datestring);
                     chg.UserKey = this.ContextUserKey;

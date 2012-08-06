@@ -24,6 +24,8 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("LogicLibary", "GoodsChanged", "Goods", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LogicLibary.Goods), "ChangedSet", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LogicLibary.Changed))]
 [assembly: EdmRelationshipAttribute("LogicLibary", "BrandBrand", "Brand", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LogicLibary.Brand), "ChildBrand", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(LogicLibary.Brand))]
 [assembly: EdmRelationshipAttribute("LogicLibary", "PriceGoods", "Price", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LogicLibary.Price), "Goods", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LogicLibary.Goods))]
+[assembly: EdmRelationshipAttribute("LogicLibary", "GoodsGoodsItem", "Goods", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LogicLibary.Goods), "GoodsItem", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LogicLibary.GoodsItem))]
+[assembly: EdmRelationshipAttribute("LogicLibary", "ChangedGoodsItem", "Changed", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(LogicLibary.Changed), "GoodsItem", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(LogicLibary.GoodsItem))]
 
 #endregion
 
@@ -320,8 +322,8 @@ namespace LogicLibary
         /// <param name="value">Value 属性的初始值。</param>
         /// <param name="date">Date 属性的初始值。</param>
         /// <param name="quantity">Quantity 属性的初始值。</param>
-        /// <param name="cost">Cost 属性的初始值。</param>
-        public static Changed CreateChanged(global::System.Int32 id, global::System.String userKey, global::System.DateTime modified, global::System.Decimal value, global::System.DateTime date, global::System.Decimal quantity, global::System.Decimal cost)
+        /// <param name="pieceCost">PieceCost 属性的初始值。</param>
+        public static Changed CreateChanged(global::System.Int32 id, global::System.String userKey, global::System.DateTime modified, global::System.Decimal value, global::System.DateTime date, global::System.Decimal quantity, global::System.Decimal pieceCost)
         {
             Changed changed = new Changed();
             changed.ID = id;
@@ -330,7 +332,7 @@ namespace LogicLibary
             changed.Value = value;
             changed.Date = date;
             changed.Quantity = quantity;
-            changed.Cost = cost;
+            changed.PieceCost = pieceCost;
             return changed;
         }
 
@@ -414,24 +416,24 @@ namespace LogicLibary
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Decimal Cost
+        public global::System.Decimal PieceCost
         {
             get
             {
-                return _Cost;
+                return _PieceCost;
             }
             set
             {
-                OnCostChanging(value);
-                ReportPropertyChanging("Cost");
-                _Cost = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Cost");
-                OnCostChanged();
+                OnPieceCostChanging(value);
+                ReportPropertyChanging("PieceCost");
+                _PieceCost = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("PieceCost");
+                OnPieceCostChanged();
             }
         }
-        private global::System.Decimal _Cost;
-        partial void OnCostChanging(global::System.Decimal value);
-        partial void OnCostChanged();
+        private global::System.Decimal _PieceCost;
+        partial void OnPieceCostChanging(global::System.Decimal value);
+        partial void OnPieceCostChanged();
 
         #endregion
     
@@ -474,6 +476,28 @@ namespace LogicLibary
                 }
             }
         }
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LogicLibary", "ChangedGoodsItem", "GoodsItem")]
+        public EntityCollection<GoodsItem> GoodsItemSet
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<GoodsItem>("LogicLibary.ChangedGoodsItem", "GoodsItem");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<GoodsItem>("LogicLibary.ChangedGoodsItem", "GoodsItem", value);
+                }
+            }
+        }
 
         #endregion
     }
@@ -489,6 +513,7 @@ namespace LogicLibary
     [KnownTypeAttribute(typeof(Brand))]
     [KnownTypeAttribute(typeof(Changed))]
     [KnownTypeAttribute(typeof(Price))]
+    [KnownTypeAttribute(typeof(GoodsItem))]
     public abstract partial class Entity : EntityObject
     {
         #region 基元属性
@@ -796,6 +821,217 @@ namespace LogicLibary
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Price>("LogicLibary.PriceGoods", "Price", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LogicLibary", "GoodsGoodsItem", "GoodsItem")]
+        public EntityCollection<GoodsItem> GoodsItemSet
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<GoodsItem>("LogicLibary.GoodsGoodsItem", "GoodsItem");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<GoodsItem>("LogicLibary.GoodsGoodsItem", "GoodsItem", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// 没有元数据文档可用。
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="LogicLibary", Name="GoodsItem")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class GoodsItem : Entity
+    {
+        #region 工厂方法
+    
+        /// <summary>
+        /// 创建新的 GoodsItem 对象。
+        /// </summary>
+        /// <param name="id">ID 属性的初始值。</param>
+        /// <param name="userKey">UserKey 属性的初始值。</param>
+        /// <param name="modified">Modified 属性的初始值。</param>
+        /// <param name="itemID">ItemID 属性的初始值。</param>
+        /// <param name="productionDate">ProductionDate 属性的初始值。</param>
+        /// <param name="expiryDate">ExpiryDate 属性的初始值。</param>
+        public static GoodsItem CreateGoodsItem(global::System.Int32 id, global::System.String userKey, global::System.DateTime modified, global::System.String itemID, global::System.String productionDate, global::System.String expiryDate)
+        {
+            GoodsItem goodsItem = new GoodsItem();
+            goodsItem.ID = id;
+            goodsItem.UserKey = userKey;
+            goodsItem.Modified = modified;
+            goodsItem.ItemID = itemID;
+            goodsItem.ProductionDate = productionDate;
+            goodsItem.ExpiryDate = expiryDate;
+            return goodsItem;
+        }
+
+        #endregion
+        #region 基元属性
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ItemID
+        {
+            get
+            {
+                return _ItemID;
+            }
+            set
+            {
+                OnItemIDChanging(value);
+                ReportPropertyChanging("ItemID");
+                _ItemID = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ItemID");
+                OnItemIDChanged();
+            }
+        }
+        private global::System.String _ItemID;
+        partial void OnItemIDChanging(global::System.String value);
+        partial void OnItemIDChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ProductionDate
+        {
+            get
+            {
+                return _ProductionDate;
+            }
+            set
+            {
+                OnProductionDateChanging(value);
+                ReportPropertyChanging("ProductionDate");
+                _ProductionDate = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ProductionDate");
+                OnProductionDateChanged();
+            }
+        }
+        private global::System.String _ProductionDate;
+        partial void OnProductionDateChanging(global::System.String value);
+        partial void OnProductionDateChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ExpiryDate
+        {
+            get
+            {
+                return _ExpiryDate;
+            }
+            set
+            {
+                OnExpiryDateChanging(value);
+                ReportPropertyChanging("ExpiryDate");
+                _ExpiryDate = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ExpiryDate");
+                OnExpiryDateChanged();
+            }
+        }
+        private global::System.String _ExpiryDate;
+        partial void OnExpiryDateChanging(global::System.String value);
+        partial void OnExpiryDateChanged();
+
+        #endregion
+    
+        #region 导航属性
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LogicLibary", "GoodsGoodsItem", "Goods")]
+        public Goods Goods
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Goods>("LogicLibary.GoodsGoodsItem", "Goods").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Goods>("LogicLibary.GoodsGoodsItem", "Goods").Value = value;
+            }
+        }
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<Goods> GoodsReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Goods>("LogicLibary.GoodsGoodsItem", "Goods");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Goods>("LogicLibary.GoodsGoodsItem", "Goods", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("LogicLibary", "ChangedGoodsItem", "Changed")]
+        public Changed Changed
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Changed>("LogicLibary.ChangedGoodsItem", "Changed").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Changed>("LogicLibary.ChangedGoodsItem", "Changed").Value = value;
+            }
+        }
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<Changed> ChangedReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Changed>("LogicLibary.ChangedGoodsItem", "Changed");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Changed>("LogicLibary.ChangedGoodsItem", "Changed", value);
                 }
             }
         }
@@ -1205,17 +1441,17 @@ namespace LogicLibary
         /// <param name="userKey">UserKey 属性的初始值。</param>
         /// <param name="modified">Modified 属性的初始值。</param>
         /// <param name="value">Value 属性的初始值。</param>
-        /// <param name="before_tax">Before_tax 属性的初始值。</param>
-        /// <param name="discount_lines">Discount_lines 属性的初始值。</param>
-        public static Price CreatePrice(global::System.Int32 id, global::System.String userKey, global::System.DateTime modified, global::System.Decimal value, global::System.Boolean before_tax, global::System.Decimal discount_lines)
+        /// <param name="beforeTax">BeforeTax 属性的初始值。</param>
+        /// <param name="discountLimits">DiscountLimits 属性的初始值。</param>
+        public static Price CreatePrice(global::System.Int32 id, global::System.String userKey, global::System.DateTime modified, global::System.Decimal value, global::System.Boolean beforeTax, global::System.Decimal discountLimits)
         {
             Price price = new Price();
             price.ID = id;
             price.UserKey = userKey;
             price.Modified = modified;
             price.Value = value;
-            price.Before_tax = before_tax;
-            price.Discount_lines = discount_lines;
+            price.BeforeTax = beforeTax;
+            price.DiscountLimits = discountLimits;
             return price;
         }
 
@@ -1251,48 +1487,48 @@ namespace LogicLibary
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Boolean Before_tax
+        public global::System.Boolean BeforeTax
         {
             get
             {
-                return _Before_tax;
+                return _BeforeTax;
             }
             set
             {
-                OnBefore_taxChanging(value);
-                ReportPropertyChanging("Before_tax");
-                _Before_tax = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Before_tax");
-                OnBefore_taxChanged();
+                OnBeforeTaxChanging(value);
+                ReportPropertyChanging("BeforeTax");
+                _BeforeTax = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("BeforeTax");
+                OnBeforeTaxChanged();
             }
         }
-        private global::System.Boolean _Before_tax;
-        partial void OnBefore_taxChanging(global::System.Boolean value);
-        partial void OnBefore_taxChanged();
+        private global::System.Boolean _BeforeTax;
+        partial void OnBeforeTaxChanging(global::System.Boolean value);
+        partial void OnBeforeTaxChanged();
     
         /// <summary>
         /// 没有元数据文档可用。
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Decimal Discount_lines
+        public global::System.Decimal DiscountLimits
         {
             get
             {
-                return _Discount_lines;
+                return _DiscountLimits;
             }
             set
             {
-                OnDiscount_linesChanging(value);
-                ReportPropertyChanging("Discount_lines");
-                _Discount_lines = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("Discount_lines");
-                OnDiscount_linesChanged();
+                OnDiscountLimitsChanging(value);
+                ReportPropertyChanging("DiscountLimits");
+                _DiscountLimits = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DiscountLimits");
+                OnDiscountLimitsChanged();
             }
         }
-        private global::System.Decimal _Discount_lines;
-        partial void OnDiscount_linesChanging(global::System.Decimal value);
-        partial void OnDiscount_linesChanged();
+        private global::System.Decimal _DiscountLimits;
+        partial void OnDiscountLimitsChanging(global::System.Decimal value);
+        partial void OnDiscountLimitsChanged();
 
         #endregion
     
