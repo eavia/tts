@@ -248,14 +248,19 @@
             <End Role="Brand" EntitySet="EntitySet" />
             <End Role="ChildBrand" EntitySet="EntitySet" />
           </AssociationSet>
+          <AssociationSet Name="PriceGoods" Association="LogicLibary.PriceGoods">
+            <End Role="Price" EntitySet="EntitySet" />
+            <End Role="Goods" EntitySet="EntitySet" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Goods" BaseType="LogicLibary.Entity">
           <Property Name="GoodsName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
-          <Property Type="Double" Name="Quantity" Nullable="false" />
+          <Property Type="Decimal" Name="Quantity" Nullable="false" />
           <NavigationProperty Name="Unit" Relationship="LogicLibary.GoodsUnitGoods" FromRole="Goods" ToRole="GoodsUnit" />
           <NavigationProperty Name="Brand" Relationship="LogicLibary.BrandGoods" FromRole="Goods" ToRole="Brand" />
           <NavigationProperty Name="ChangedSet" Relationship="LogicLibary.GoodsChanged" FromRole="Goods" ToRole="ChangedSet" />
           <Property Type="Boolean" Name="Enable" Nullable="false" DefaultValue="FALSE" />
+          <NavigationProperty Name="PriceSet" Relationship="LogicLibary.PriceGoods" FromRole="Goods" ToRole="Price" />
         </EntityType>
         <EntityType Name="GoodsUnit" BaseType="LogicLibary.Entity">
           <Property Name="UnitName" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
@@ -291,10 +296,11 @@
           <NavigationProperty Name="ChildBrandSet" Relationship="LogicLibary.BrandBrand" FromRole="ChildBrand" ToRole="Brand" />
         </EntityType>
         <EntityType Name="Changed" BaseType="LogicLibary.Entity">
-          <Property Type="Double" Name="Value" Nullable="false" />
+          <Property Type="Decimal" Name="Value" Nullable="false" />
           <Property Type="DateTime" Name="Date" Nullable="false" />
-          <Property Type="Double" Name="Quantity" Nullable="false" />
+          <Property Type="Decimal" Name="Quantity" Nullable="false" />
           <NavigationProperty Name="Goods" Relationship="LogicLibary.GoodsChanged" FromRole="ChangedSet" ToRole="Goods" />
+          <Property Type="Decimal" Name="Cost" Nullable="false" />
         </EntityType>
         <Association Name="GoodsUnitGoods">
           <End Type="LogicLibary.GoodsUnit" Role="GoodsUnit" Multiplicity="1" />
@@ -319,6 +325,16 @@
         <Association Name="BrandBrand">
           <End Type="LogicLibary.Brand" Role="Brand" Multiplicity="*" />
           <End Type="LogicLibary.Brand" Role="ChildBrand" Multiplicity="0..1" />
+        </Association>
+        <EntityType Name="Price" BaseType="LogicLibary.Entity" >
+          <NavigationProperty Name="Goods" Relationship="LogicLibary.PriceGoods" FromRole="Price" ToRole="Goods" />
+          <Property Type="Decimal" Name="Value" Nullable="false" />
+          <Property Type="Boolean" Name="Before_tax" Nullable="false" />
+          <Property Type="Decimal" Name="Discount_lines" Nullable="false" />
+        </EntityType>
+        <Association Name="PriceGoods">
+          <End Type="LogicLibary.Price" Role="Price" Multiplicity="*" />
+          <End Type="LogicLibary.Goods" Role="Goods" Multiplicity="1" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -443,7 +459,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="StoreDb">
-        <EntityTypeShape EntityType="LogicLibary.Goods" Width="1.5" PointX="5.5" PointY="3.375" Height="2.1610522460937496" IsExpanded="true" />
+        <EntityTypeShape EntityType="LogicLibary.Goods" Width="1.5" PointX="5.75" PointY="3.125" Height="2.0853483072916665" IsExpanded="true" />
         <EntityTypeShape EntityType="LogicLibary.GoodsUnit" Width="1.5" PointX="0.75" PointY="3.75" Height="1.5879931640625" IsExpanded="true" />
         <EntityTypeShape EntityType="LogicLibary.OrderBody" Width="1.5" PointX="0.625" PointY="6" Height="1.4279589843749996" />
         <EntityTypeShape EntityType="LogicLibary.OrderHead" Width="1.5" PointX="2.5" PointY="5.75" Height="1.7566536458333335" />
@@ -451,54 +467,69 @@
           <ConnectorPoint PointX="2.5" PointY="6.7139794921875" />
           <ConnectorPoint PointX="2.125" PointY="6.7139794921875" />
         </AssociationConnector>
-        <EntityTypeShape EntityType="LogicLibary.Brand" Width="1.5" PointX="8.25" PointY="3.5" Height="1.7790128580729165" />
-        <EntityTypeShape EntityType="LogicLibary.Changed" Width="1.5" PointX="2.75" PointY="3.625" Height="1.7790128580729165" />
+        <EntityTypeShape EntityType="LogicLibary.Brand" Width="1.5" PointX="7.875" PointY="3.5" Height="1.5923063151041665" />
+        <EntityTypeShape EntityType="LogicLibary.Changed" Width="1.5" PointX="2.625" PointY="3.625" Height="1.7566536458333335" />
         <AssociationConnector Association="LogicLibary.GoodsUnitGoods">
           <ConnectorPoint PointX="1.9062525" PointY="3.75" />
-          <ConnectorPoint PointX="1.9062525" PointY="3.46875" />
-          <ConnectorPoint PointX="3.4166666666666665" PointY="3.4687499999999996" />
-          <ConnectorPoint PointX="3.5833333333333335" PointY="3.46875" />
-          <ConnectorPoint PointX="5.5" PointY="3.46875" />
+          <ConnectorPoint PointX="1.9062525" PointY="3.40625" />
+          <ConnectorPoint PointX="3.2916666666666665" PointY="3.4062499999999996" />
+          <ConnectorPoint PointX="3.4583333333333335" PointY="3.40625" />
+          <ConnectorPoint PointX="4.666666666666667" PointY="3.4062499999999996" />
+          <ConnectorPoint PointX="4.833333333333333" PointY="3.40625" />
+          <ConnectorPoint PointX="5.75" PointY="3.40625" />
         </AssociationConnector>
         <AssociationConnector Association="LogicLibary.BrandGoods">
-          <ConnectorPoint PointX="8.25" PointY="4.3895064290364587" />
-          <ConnectorPoint PointX="7" PointY="4.3895064290364587" />
+          <ConnectorPoint PointX="7.875" PointY="4.2961531575520837" />
+          <ConnectorPoint PointX="7.25" PointY="4.2961531575520837" />
         </AssociationConnector>
         <AssociationConnector Association="LogicLibary.GoodsChanged">
-          <ConnectorPoint PointX="5.5" PointY="4.5145064290364587" />
-          <ConnectorPoint PointX="4.25" PointY="4.5145064290364587" />
+          <ConnectorPoint PointX="5.75" PointY="4.4176741536458337" />
+          <ConnectorPoint PointX="4.833333333333333" PointY="4.4176741536458328" />
+          <ConnectorPoint PointX="4.666666666666667" PointY="4.4176741536458337" />
+          <ConnectorPoint PointX="4.125" PointY="4.4176741536458337" />
         </AssociationConnector>
-        <EntityTypeShape EntityType="LogicLibary.Entity" Width="1.5" PointX="3.875" PointY="0.5" Height="1.5879931640625" />
+        <EntityTypeShape EntityType="LogicLibary.Entity" Width="1.5" PointX="4" PointY="0.75" Height="1.4279589843750002" />
         <InheritanceConnector EntityType="LogicLibary.Brand" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.625" PointY="2.0879931640625" />
-          <ConnectorPoint PointX="4.625" PointY="2.4629931640625" />
-          <ConnectorPoint PointX="9" PointY="2.4629931640625" />
-          <ConnectorPoint PointX="9" PointY="3.5" />
+          <ConnectorPoint PointX="4.75" PointY="2.1779589843750005" />
+          <ConnectorPoint PointX="4.75" PointY="2.5529589843750005" />
+          <ConnectorPoint PointX="8.625" PointY="2.5529589843750005" />
+          <ConnectorPoint PointX="8.625" PointY="3.5" />
         </InheritanceConnector>
         <AssociationConnector Association="LogicLibary.BrandBrand">
-          <ConnectorPoint PointX="8.7819230769230767" PointY="5.2790128580729165" />
-          <ConnectorPoint PointX="8.7819230769230767" PointY="5.5290128580729174" />
-          <ConnectorPoint PointX="9.2284615384615378" PointY="5.5290128580729174" />
-          <ConnectorPoint PointX="9.2284615384615378" PointY="5.2790128580729165" />
+          <ConnectorPoint PointX="8.4069230769230767" PointY="5.0923063151041665" />
+          <ConnectorPoint PointX="8.4069230769230767" PointY="5.3423063151041674" />
+          <ConnectorPoint PointX="8.85346153846154" PointY="5.3423063151041674" />
+          <ConnectorPoint PointX="8.85346153846154" PointY="5.0923063151041665" />
         </AssociationConnector>
         <InheritanceConnector EntityType="LogicLibary.GoodsUnit" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.625" PointY="2.0879931640625" />
-          <ConnectorPoint PointX="4.625" PointY="2.4629931640625" />
-          <ConnectorPoint PointX="1.5" PointY="2.4629931640625" />
+          <ConnectorPoint PointX="4.75" PointY="2.1779589843750005" />
+          <ConnectorPoint PointX="4.75" PointY="2.5529589843750005" />
+          <ConnectorPoint PointX="1.5" PointY="2.5529589843750005" />
           <ConnectorPoint PointX="1.5" PointY="3.75" />
         </InheritanceConnector>
         <InheritanceConnector EntityType="LogicLibary.Changed" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.625" PointY="2.0879931640625" />
-          <ConnectorPoint PointX="4.625" PointY="2.7129931640625" />
-          <ConnectorPoint PointX="3.5" PointY="2.7129931640625" />
-          <ConnectorPoint PointX="3.5" PointY="3.625" />
+          <ConnectorPoint PointX="4.75" PointY="2.1779589843750005" />
+          <ConnectorPoint PointX="4.75" PointY="3" />
+          <ConnectorPoint PointX="3.375" PointY="3" />
+          <ConnectorPoint PointX="3.375" PointY="3.625" />
         </InheritanceConnector>
         <InheritanceConnector EntityType="LogicLibary.Goods" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.625" PointY="2.0879931640625" />
-          <ConnectorPoint PointX="4.625" PointY="3" />
-          <ConnectorPoint PointX="6.25" PointY="3" />
-          <ConnectorPoint PointX="6.25" PointY="3.375" />
+          <ConnectorPoint PointX="4.75" PointY="2.1779589843750005" />
+          <ConnectorPoint PointX="4.75" PointY="2.75" />
+          <ConnectorPoint PointX="6.5" PointY="2.75" />
+          <ConnectorPoint PointX="6.5" PointY="3.125" />
         </InheritanceConnector>
+        <EntityTypeShape EntityType="LogicLibary.Price" Width="1.5" PointX="5.75" PointY="5.625" Height="1.5923063151041665" />
+        <InheritanceConnector EntityType="LogicLibary.Price" >
+          <ConnectorPoint PointX="4.75" PointY="2.1779589843750005" />
+          <ConnectorPoint PointX="4.75" PointY="5.385" />
+          <ConnectorPoint PointX="6.5" PointY="5.385" />
+          <ConnectorPoint PointX="6.5" PointY="5.625" />
+        </InheritanceConnector>
+        <AssociationConnector Association="LogicLibary.PriceGoods">
+          <ConnectorPoint PointX="6.9375" PointY="5.625" />
+          <ConnectorPoint PointX="6.9375" PointY="5.2103483072916665" />
+        </AssociationConnector>
       </Diagram>
     </Diagrams>
   </Designer>
