@@ -323,7 +323,9 @@ namespace LogicLibary
         /// <param name="date">Date 属性的初始值。</param>
         /// <param name="quantity">Quantity 属性的初始值。</param>
         /// <param name="pieceCost">PieceCost 属性的初始值。</param>
-        public static Changed CreateChanged(global::System.Int32 id, global::System.String userKey, global::System.DateTime modified, global::System.Decimal value, global::System.DateTime date, global::System.Decimal quantity, global::System.Decimal pieceCost)
+        /// <param name="sumCost">SumCost 属性的初始值。</param>
+        /// <param name="source">Source 属性的初始值。</param>
+        public static Changed CreateChanged(global::System.Int32 id, global::System.String userKey, global::System.DateTime modified, global::System.Decimal value, global::System.DateTime date, global::System.Decimal quantity, global::System.Decimal pieceCost, global::System.Decimal sumCost, global::System.String source)
         {
             Changed changed = new Changed();
             changed.ID = id;
@@ -333,6 +335,8 @@ namespace LogicLibary
             changed.Date = date;
             changed.Quantity = quantity;
             changed.PieceCost = pieceCost;
+            changed.SumCost = sumCost;
+            changed.Source = source;
             return changed;
         }
 
@@ -434,6 +438,54 @@ namespace LogicLibary
         private global::System.Decimal _PieceCost;
         partial void OnPieceCostChanging(global::System.Decimal value);
         partial void OnPieceCostChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal SumCost
+        {
+            get
+            {
+                return _SumCost;
+            }
+            set
+            {
+                OnSumCostChanging(value);
+                ReportPropertyChanging("SumCost");
+                _SumCost = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("SumCost");
+                OnSumCostChanged();
+            }
+        }
+        private global::System.Decimal _SumCost;
+        partial void OnSumCostChanging(global::System.Decimal value);
+        partial void OnSumCostChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Source
+        {
+            get
+            {
+                return _Source;
+            }
+            set
+            {
+                OnSourceChanging(value);
+                ReportPropertyChanging("Source");
+                _Source = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Source");
+                OnSourceChanged();
+            }
+        }
+        private global::System.String _Source;
+        partial void OnSourceChanging(global::System.String value);
+        partial void OnSourceChanged();
 
         #endregion
     

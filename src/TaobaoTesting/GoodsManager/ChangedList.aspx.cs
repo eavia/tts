@@ -51,6 +51,31 @@ namespace TaobaoTesting.GoodsManager
                 get { return this.value; }
                 set { this.value = value; }
             }
+
+            decimal pieceCost;
+
+            public decimal PieceCost
+            {
+                get { return pieceCost; }
+                set { pieceCost = value; }
+            }
+
+            decimal sumCost;
+
+            public decimal SumCost
+            {
+                get { return sumCost; }
+                set { sumCost = value; }
+            }
+
+            string source;
+
+            public string Source
+            {
+                get { return source; }
+                set { source = value; }
+            }
+
             DateTime date;
 
             public DateTime Date
@@ -131,6 +156,9 @@ namespace TaobaoTesting.GoodsManager
                 pc.Value = cd.Value;
                 pc.Quantity = cd.Quantity;
                 pc.Date = cd.Date;
+                pc.PieceCost = cd.PieceCost;
+                pc.SumCost = cd.SumCost;
+                pc.Source = cd.Source;
                 lst.Add(pc);
             }
             PageChange empty = new PageChange();
@@ -138,6 +166,9 @@ namespace TaobaoTesting.GoodsManager
             empty.GoodsId = gid;
             empty.Quantity = goods.Quantity;
             empty.Value = 0;
+            empty.PieceCost = 0;
+            empty.SumCost = 0;
+            empty.Source = "";
             empty.Date = DateTime.Now;
             lst.Add(empty);
             cdl.DataSource = lst;
@@ -160,8 +191,8 @@ namespace TaobaoTesting.GoodsManager
                     Goods goods = glogic.GetGoodsList().Single(x => x.ID.Equals(goodsid));
                     Changed chg = new Changed();
                     chg.Quantity = decimal.Parse(((Literal)dli.FindControl("ltaQuantity")).Text);
-                    chg.Value = decimal.Parse(((TextBox)dli.FindControl("ltaValue")).Text);
-                    string datestring = ((TextBox)dli.FindControl("ltaDate")).Text;
+                    chg.Value = decimal.Parse(((TextBox)dli.FindControl("txtValue")).Text);
+                    string datestring = ((TextBox)dli.FindControl("txtDate")).Text;
                     chg.Date = DateTime.Parse(datestring);
                     chg.UserKey = this.ContextUserKey;
                     if (logic.AddChangedToGoods(goods, chg))
