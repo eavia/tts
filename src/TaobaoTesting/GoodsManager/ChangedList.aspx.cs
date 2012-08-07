@@ -98,27 +98,15 @@ namespace TaobaoTesting.GoodsManager
             if (!IsPostBack)
             {
                 string goodsid = (this.Request.QueryString["gid"] ?? "NaN").ToString();
-                //hfdGoodsID.Value = goodsid;
                 BindInternalChangedList(hfdGoodsID.Value);
+                hfdGoodsID.Value = goodsid;
             }
         }
 
-        protected void dlGoods_ItemCommand(object source, DataListCommandEventArgs e)
-        {
-            string itemId = e.CommandArgument.ToString();
-            if (e.CommandName == "Change")
-            {
-                DataList dl = (DataList)source;
-                dl.SelectedIndex = e.Item.ItemIndex;
-                DataListItem item = dl.Items[e.Item.ItemIndex];
-            }
-        }
         private void BindInternalChangedList(string itemId)
         {
             DataList cdl = this.internalChangedList;
-
             List<PageChange> lst = new List<PageChange>();
-
             int gid = int.Parse(itemId);
             Goods goods = glogic.GetGoodsByID(gid);
             foreach (Changed cd in goods.ChangedSet)
@@ -149,6 +137,18 @@ namespace TaobaoTesting.GoodsManager
             cdl.EditItemIndex = lst.Count - 1;
             cdl.DataBind();
         }
+
+        protected void dlGoods_ItemCommand(object source, DataListCommandEventArgs e)
+        {
+            string itemId = e.CommandArgument.ToString();
+            if (e.CommandName == "Change")
+            {
+                DataList dl = (DataList)source;
+                dl.SelectedIndex = e.Item.ItemIndex;
+                DataListItem item = dl.Items[e.Item.ItemIndex];
+            }
+        }
+
 
         protected void InternalChangedList_ItemCommand(object source, DataListCommandEventArgs e)
         {

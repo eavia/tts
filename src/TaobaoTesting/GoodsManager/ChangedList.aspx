@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ChangedList.aspx.cs" Inherits="TaobaoTesting.GoodsManager.ChangedList" %>
 
+<%@ Register Assembly="AspNetPager" Namespace="Wuqi.Webdiyer" TagPrefix="webdiyer" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
@@ -23,6 +24,58 @@
     </script>
     <script src="../Datepicker/WdatePicker.js" type="text/javascript"></script>
     <link href="~/Styles/Site.css" rel="stylesheet" type="text/css" />
+    <style type="text/css">       
+        /*淘宝风格*/
+        .paginator
+        {
+            font: 12px Arial, Helvetica, sans-serif;
+            padding: 10px 20px 10px 0;
+            margin: 0px;
+        }
+        .paginator a
+        {
+            border: solid 1px #ccc;
+            color: #0063dc;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .paginator a:visited
+        {
+            padding: 1px 6px;
+            border: solid 1px #ddd;
+            background: #fff;
+            text-decoration: none;
+        }
+        .paginator .cpb
+        {
+            border: 1px solid #F50;
+            font-weight: 700;
+            color: #F50;
+            background-color: #ffeee5;
+        }
+        .paginator a:hover
+        {
+            border: solid 1px #F50;
+            color: #f60;
+            text-decoration: none;
+        }
+        .paginator a, .paginator a:visited, .paginator .cpb, .paginator a:hover
+        {
+            float: left;
+            height: 16px;
+            line-height: 16px;
+            min-width: 10px;
+            _width: 10px;
+            margin-right: 5px;
+            text-align: center;
+            white-space: nowrap;
+            font-size: 12px;
+            font-family: Arial,SimSun;
+            padding: 0 3px;
+        }
+        .padding:0px
+        {}
+    </style>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -30,7 +83,8 @@
         <div id="clearbar" style="display: none;">
             <asp:HiddenField ID="hfdGoodsID" runat="server" Value="3" />
         </div>
-        <asp:DataList Width="100%" ID="internalChangedList" runat="server" ExtractTemplateRows="true"
+        <div style="w; width: 900px;">
+        <asp:DataList Width="900px" ID="internalChangedList" runat="server" ExtractTemplateRows="true"
             CellPadding="2" DataKeyField="ChangedId" GridLines="Both" OnItemCommand="InternalChangedList_ItemCommand"
             CssClass="margin:0px 0px 0px 0px; padding:0px 0px 0px 0px;">
             <HeaderTemplate>
@@ -54,7 +108,8 @@
                 Height="25px" />
             <ItemTemplate>
                 <asp:Table ID="tabItem" runat="server">
-                    <asp:TableRow>
+                    <asp:TableRow onmouseover="c=this.style.backgroundColor;this.style.backgroundColor='#6699ff'"
+                        onmouseout="this.style.backgroundColor=c" Style="background-color: Silver">
                         <asp:TableCell>
                             <asp:Literal ID="ltaIndex" runat="server" Text='<%#Container.ItemIndex+1%>'></asp:Literal>
                         </asp:TableCell>
@@ -110,6 +165,12 @@
                 </asp:Table>
             </EditItemTemplate>
         </asp:DataList>
+        <webdiyer:AspNetPager ID="ChangedPager" CssClass="paginator"   
+                CurrentPageButtonClass="cpb" runat="server" AlwaysShow="True" 
+FirstPageText="首页"  LastPageText="尾页" NextPageText="下一页" PrevPageText="上一页"  ShowCustomInfoSection="Left" 
+ShowInputBox="Never"   CustomInfoTextAlign="Left" LayoutType="Table" Width="900px"  >
+</webdiyer:AspNetPager>
+</div>
         <hr />
         <asp:DataList Width="100%" ID="DataList1" runat="server" ExtractTemplateRows="true"
             CellPadding="2" DataKeyField="ChangedId" GridLines="Both" OnItemCommand="InternalChangedList_ItemCommand"
