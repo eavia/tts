@@ -97,35 +97,10 @@ namespace TaobaoTesting.GoodsManager
         {
             if (!IsPostBack)
             {
-                BindGoodsList();
+                string goodsid = (this.Request.QueryString["gid"] ?? "NaN").ToString();
+                hfdGoodsID.Value = goodsid;
+                BindInternalChangedList(goodsid);
             }
-        }
-
-        private void BindGoodsList(string afterIndex)
-        {
-            BindGoodsList();
-            int id = -1;
-            if (!string.IsNullOrEmpty(afterIndex) && int.TryParse(afterIndex, out id))
-            {
-                this.dlGoods.SelectedIndex = id;
-                DataListItem dlt = this.dlGoods.Items[id];
-                Literal lta = (Literal)dlt.FindControl("lbId");
-                ShowChangedList(this.dlGoods.Items[id], lta.Text);
-            }
-        }
-
-        private void BindGoodsList()
-        {
-            this.dlGoods.DataSource = glogic.GetGoodsList();
-            this.dlGoods.DataBind();
-        }
-
-        private void ShowChangedList(DataListItem item, string goodsid)
-        {
-
-            Control tr = item.FindControl("internal");
-            tr.Visible = true;
-            BindInternalChangedList(item, goodsid);
         }
 
         protected void dlGoods_ItemCommand(object source, DataListCommandEventArgs e)
@@ -137,12 +112,11 @@ namespace TaobaoTesting.GoodsManager
                 dl.SelectedIndex = e.Item.ItemIndex;
                 hfdSeletedIndex.Value = e.Item.ItemIndex.ToString();
                 DataListItem item = dl.Items[e.Item.ItemIndex];
-                ShowChangedList(item, itemId);
             }
         }
-        private void BindInternalChangedList(DataListItem it, string itemId)
+        private void BindInternalChangedList(string itemId)
         {
-            DataList cdl = (DataList)it.FindControl("internalChangedList");
+            DataList cdl = this.internalChangedList;
 
             List<PageChange> lst = new List<PageChange>();
 
@@ -161,6 +135,7 @@ namespace TaobaoTesting.GoodsManager
                 pc.Source = cd.Source;
                 lst.Add(pc);
             }
+
             PageChange empty = new PageChange();
             empty.ChangedId = -1;
             empty.GoodsId = gid;
@@ -197,8 +172,7 @@ namespace TaobaoTesting.GoodsManager
                     chg.UserKey = this.ContextUserKey;
                     if (logic.AddChangedToGoods(goods, chg))
                     {
-                        BindGoodsList(this.hfdSeletedIndex.Value);
-                        BindInternalChangedList((DataListItem)dl.Parent.Parent.Parent.Parent, goodsid.ToString());
+                        BindInternalChangedList(goodsid.ToString());
                     }
                 }
             }
