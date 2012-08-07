@@ -21,14 +21,14 @@
             return true;
         }
     </script>
+    <script src="../Datepicker/WdatePicker.js" type="text/javascript"></script>
     <link href="~/Styles/Site.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
     <form id="form1" runat="server">
-    <div style=" padding: 2px 2px 2px 2px; margin: 2px 2px 2px 2px;">
+    <div style="padding: 2px 2px 2px 2px; margin: 2px 2px 2px 2px;">
         <div id="clearbar" style="display: none;">
-            <asp:HiddenField ID="hfdGoodsID" runat="server" />
-            <asp:HiddenField ID="hfdSeletedIndex" runat="server" />
+            <asp:HiddenField ID="hfdGoodsID" runat="server" Value="3" />
         </div>
         <asp:DataList Width="100%" ID="internalChangedList" runat="server" ExtractTemplateRows="true"
             CellPadding="2" DataKeyField="ChangedId" GridLines="Both" OnItemCommand="InternalChangedList_ItemCommand"
@@ -49,9 +49,9 @@
                 </asp:Table>
             </HeaderTemplate>
             <ItemStyle ForeColor="Black" Height="30px" />
-                <FooterStyle BackColor="#C6C3C6" ForeColor="Black" />
-                <HeaderStyle BackColor="#A6CBEF" Font-Bold="True" ForeColor="#404040" BorderColor="#A6CBEF"
-                    Height="25px" />
+            <FooterStyle BackColor="#C6C3C6" ForeColor="Black" />
+            <HeaderStyle BackColor="#A6CBEF" Font-Bold="True" ForeColor="#404040" BorderColor="#A6CBEF"
+                Height="25px" />
             <ItemTemplate>
                 <asp:Table ID="tabItem" runat="server">
                     <asp:TableRow>
@@ -99,13 +99,74 @@
                                 Width="60px"></asp:TextBox></asp:TableCell>
                         <asp:TableCell>
                             <asp:TextBox ID="txtSource" runat="server" CssClass="textBoxLine" Text='<%#Eval("Source")%>'
-                                Width="60px"></asp:TextBox></asp:TableCell>
+                                Width="240px"></asp:TextBox></asp:TableCell>
                         <asp:TableCell>
-                            <asp:TextBox ID="txtDate" runat="server" CssClass="textBoxLine" Text='<%#Eval("Date")%>'
-                                Width="60px"></asp:TextBox></asp:TableCell>
+                            <asp:TextBox ID="txtDate" runat="server" CssClass="textBoxLine" Text='<%#DataBinder.Eval(Container.DataItem,"Date","{0:yyyy-mm-dd}")%>'
+                                onclick="WdatePicker();" Width="70px"></asp:TextBox></asp:TableCell>
                         <asp:TableCell Width="80px">
                             <asp:LinkButton ID="lnkSave" runat="server" CommandName="Save" CommandArgument='<%#Eval("GoodsId")%>'>保存</asp:LinkButton>
                         </asp:TableCell>
+                    </asp:TableRow>
+                </asp:Table>
+            </EditItemTemplate>
+        </asp:DataList>
+        <hr />
+        <asp:DataList Width="100%" ID="DataList1" runat="server" ExtractTemplateRows="true"
+            CellPadding="2" DataKeyField="ChangedId" GridLines="Both" OnItemCommand="InternalChangedList_ItemCommand"
+            CssClass="margin:0px 0px 0px 0px; padding:0px 0px 0px 0px;">
+            <HeaderTemplate>
+                <asp:Table ID="tabHeader" runat="server">
+                    <asp:TableRow>
+                        <asp:TableHeaderCell Width="45px">序号</asp:TableHeaderCell>
+                        <asp:TableHeaderCell Width="60px">编号</asp:TableHeaderCell>
+                        <asp:TableHeaderCell Width="90px">标识</asp:TableHeaderCell>
+                        <asp:TableHeaderCell Width="70px">出厂日期</asp:TableHeaderCell>
+                        <asp:TableHeaderCell Width="70px">有效期限</asp:TableHeaderCell>
+                        <asp:TableHeaderCell Width="60px">数量</asp:TableHeaderCell>
+                    </asp:TableRow>
+                </asp:Table>
+            </HeaderTemplate>
+            <ItemStyle ForeColor="Black" Height="30px" />
+            <FooterStyle BackColor="#C6C3C6" ForeColor="Black" />
+            <HeaderStyle BackColor="#A6CBEF" Font-Bold="True" ForeColor="#404040" BorderColor="#A6CBEF"
+                Height="25px" />
+            <ItemTemplate>
+                <asp:Table ID="tabItem" runat="server">
+                    <asp:TableRow>
+                        <asp:TableCell>
+                            <asp:Literal ID="ltaIndex" runat="server" Text='<%#Container.ItemIndex+1%>'></asp:Literal>
+                        </asp:TableCell>
+                        <asp:TableCell>
+                            <asp:Literal ID="ltaId" runat="server" Text='<%#Eval("ID")%>'></asp:Literal></asp:TableCell>
+                        <asp:TableCell>
+                            <asp:Literal ID="ltaQuantity" runat="server" Text='<%#Eval("ItemIdenifity")%>'></asp:Literal></asp:TableCell>
+                        <asp:TableCell>
+                            <asp:Literal ID="ltaValue" runat="server" Text='<%#Eval("ProductionDate")%>'></asp:Literal></asp:TableCell>
+                        <asp:TableCell>
+                            <asp:Literal ID="ltaPieceCost" runat="server" Text='<%#Eval("ExpiryDate")%>'></asp:Literal></asp:TableCell>
+                        <asp:TableCell>
+                            <asp:Literal ID="ltaSumCost" runat="server" Text='<%#Eval("Quantity")%>'></asp:Literal></asp:TableCell>
+                    </asp:TableRow>
+                </asp:Table>
+            </ItemTemplate>
+            <EditItemTemplate>
+                <asp:Table ID="tabEditItem" runat="server">
+                    <asp:TableRow>
+                        <asp:TableCell>
+                            <asp:Literal ID="ltaIndex" runat="server" Text='<%#Container.ItemIndex+1%>'></asp:Literal>
+                        </asp:TableCell>
+                        <asp:TableCell>
+                            <asp:TextBox ID="txtChangeID" runat="server" Text='<%#Eval("ID")%>' Width="60px"></asp:TextBox></asp:TableCell>
+                        <asp:TableCell>
+                            <asp:TextBox ID="txtIdenifity" runat="server" Text='<%#Eval("ItemIdenifity")%>'></asp:TextBox></asp:TableCell>
+                        <asp:TableCell>
+                            <asp:TextBox ID="txtValue" runat="server" Text='<%#Eval("ProductionDate")%>' CssClass="textBoxLine"
+                                onclick="WdatePicker();"></asp:TextBox></asp:TableCell>
+                        <asp:TableCell>
+                            <asp:TextBox ID="txtPieceCost" runat="server" CssClass="textBoxLine" Text='<%#Eval("ExpiryDate")%>'
+                                onclick="WdatePicker();"></asp:TextBox></asp:TableCell>
+                        <asp:TableCell>
+                            <asp:TextBox ID="txtSumCost" runat="server" CssClass="textBoxLine" Text='<%#Eval("Quantity")%>'></asp:TextBox></asp:TableCell>
                     </asp:TableRow>
                 </asp:Table>
             </EditItemTemplate>

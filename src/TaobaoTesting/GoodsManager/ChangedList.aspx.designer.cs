@@ -31,15 +31,6 @@ namespace TaobaoTesting.GoodsManager {
         protected global::System.Web.UI.WebControls.HiddenField hfdGoodsID;
         
         /// <summary>
-        /// hfdSeletedIndex 控件。
-        /// </summary>
-        /// <remarks>
-        /// 自动生成的字段。
-        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HiddenField hfdSeletedIndex;
-        
-        /// <summary>
         /// internalChangedList 控件。
         /// </summary>
         /// <remarks>
@@ -47,5 +38,14 @@ namespace TaobaoTesting.GoodsManager {
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
         protected global::System.Web.UI.WebControls.DataList internalChangedList;
+        
+        /// <summary>
+        /// DataList1 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DataList DataList1;
     }
 }

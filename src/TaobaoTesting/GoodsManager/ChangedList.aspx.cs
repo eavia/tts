@@ -98,8 +98,8 @@ namespace TaobaoTesting.GoodsManager
             if (!IsPostBack)
             {
                 string goodsid = (this.Request.QueryString["gid"] ?? "NaN").ToString();
-                hfdGoodsID.Value = goodsid;
-                BindInternalChangedList(goodsid);
+                //hfdGoodsID.Value = goodsid;
+                BindInternalChangedList(hfdGoodsID.Value);
             }
         }
 
@@ -110,7 +110,6 @@ namespace TaobaoTesting.GoodsManager
             {
                 DataList dl = (DataList)source;
                 dl.SelectedIndex = e.Item.ItemIndex;
-                hfdSeletedIndex.Value = e.Item.ItemIndex.ToString();
                 DataListItem item = dl.Items[e.Item.ItemIndex];
             }
         }
@@ -180,7 +179,6 @@ namespace TaobaoTesting.GoodsManager
             {
                 DataListItem dli = e.Item;
                 Control tr = dli.Parent.Parent.Parent;
-                this.hfdSeletedIndex.Value = "-1";
                 tr.Visible = false;
             }
         }

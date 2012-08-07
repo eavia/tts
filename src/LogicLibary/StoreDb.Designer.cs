@@ -918,18 +918,20 @@ namespace LogicLibary
         /// <param name="id">ID 属性的初始值。</param>
         /// <param name="userKey">UserKey 属性的初始值。</param>
         /// <param name="modified">Modified 属性的初始值。</param>
-        /// <param name="itemID">ItemID 属性的初始值。</param>
+        /// <param name="itemIdenifity">ItemIdenifity 属性的初始值。</param>
         /// <param name="productionDate">ProductionDate 属性的初始值。</param>
         /// <param name="expiryDate">ExpiryDate 属性的初始值。</param>
-        public static GoodsItem CreateGoodsItem(global::System.Int32 id, global::System.String userKey, global::System.DateTime modified, global::System.String itemID, global::System.String productionDate, global::System.String expiryDate)
+        /// <param name="quantity">Quantity 属性的初始值。</param>
+        public static GoodsItem CreateGoodsItem(global::System.Int32 id, global::System.String userKey, global::System.DateTime modified, global::System.String itemIdenifity, global::System.String productionDate, global::System.String expiryDate, global::System.Decimal quantity)
         {
             GoodsItem goodsItem = new GoodsItem();
             goodsItem.ID = id;
             goodsItem.UserKey = userKey;
             goodsItem.Modified = modified;
-            goodsItem.ItemID = itemID;
+            goodsItem.ItemIdenifity = itemIdenifity;
             goodsItem.ProductionDate = productionDate;
             goodsItem.ExpiryDate = expiryDate;
+            goodsItem.Quantity = quantity;
             return goodsItem;
         }
 
@@ -941,24 +943,24 @@ namespace LogicLibary
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String ItemID
+        public global::System.String ItemIdenifity
         {
             get
             {
-                return _ItemID;
+                return _ItemIdenifity;
             }
             set
             {
-                OnItemIDChanging(value);
-                ReportPropertyChanging("ItemID");
-                _ItemID = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("ItemID");
-                OnItemIDChanged();
+                OnItemIdenifityChanging(value);
+                ReportPropertyChanging("ItemIdenifity");
+                _ItemIdenifity = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ItemIdenifity");
+                OnItemIdenifityChanged();
             }
         }
-        private global::System.String _ItemID;
-        partial void OnItemIDChanging(global::System.String value);
-        partial void OnItemIDChanged();
+        private global::System.String _ItemIdenifity;
+        partial void OnItemIdenifityChanging(global::System.String value);
+        partial void OnItemIdenifityChanged();
     
         /// <summary>
         /// 没有元数据文档可用。
@@ -1007,6 +1009,30 @@ namespace LogicLibary
         private global::System.String _ExpiryDate;
         partial void OnExpiryDateChanging(global::System.String value);
         partial void OnExpiryDateChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Decimal Quantity
+        {
+            get
+            {
+                return _Quantity;
+            }
+            set
+            {
+                OnQuantityChanging(value);
+                ReportPropertyChanging("Quantity");
+                _Quantity = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Quantity");
+                OnQuantityChanged();
+            }
+        }
+        private global::System.Decimal _Quantity;
+        partial void OnQuantityChanging(global::System.Decimal value);
+        partial void OnQuantityChanged();
 
         #endregion
     
