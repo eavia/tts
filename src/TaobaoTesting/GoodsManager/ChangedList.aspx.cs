@@ -7,15 +7,13 @@ using System.Web.UI.WebControls;
 using LogicLibary;
 using LogicLibary.GoodsManager;
 using LogicLibary.SettingManager;
+using System.Data.Objects;
 
 namespace TaobaoTesting.GoodsManager
 {
     public partial class ChangedList : BasePage
     {
-        private ChangedLogic logic;
         private GoodsLogic glogic;
-        private BrandLogic blogic;
-        private UnitLogic ulogic;
 
         private StoreEntities dbContext = new StoreEntities();
 
@@ -87,33 +85,39 @@ namespace TaobaoTesting.GoodsManager
 
         public ChangedList()
         {
-            logic = new ChangedLogic(dbContext, this.ContextUserKey);
             glogic = new GoodsLogic(dbContext, this.ContextUserKey);
-            blogic = new BrandLogic(dbContext, this.ContextUserKey);
-            ulogic = new UnitLogic(dbContext, this.ContextUserKey);
         }
+
+        private int _contextGoodsID = -1;
 
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
                 string goodsid = (this.Request.QueryString["gid"] ?? "NaN").ToString();
-                BindInternalChangedList(hfdGoodsID.Value);
                 hfdGoodsID.Value = goodsid;
+                _contextGoodsID = int.Parse(hfdGoodsID.Value);
+                Goods g = glogic.GetGoodsByID(_contextGoodsID);
+                BindInternalChangedList(BuildPageList(g));
             }
+            else
+            {
+                _contextGoodsID = int.Parse(hfdGoodsID.Value);
+            }
+
         }
 
-        private void BindInternalChangedList(string itemId)
+        private List<PageChange> BuildPageList(Goods g)
         {
-            DataList cdl = this.internalChangedList;
+
+            g.ChangedSet.Load();
             List<PageChange> lst = new List<PageChange>();
-            int gid = int.Parse(itemId);
-            Goods goods = glogic.GetGoodsByID(gid);
-            foreach (Changed cd in goods.ChangedSet)
+
+            foreach (Changed cd in g.ChangedSet)
             {
                 PageChange pc = new PageChange();
                 pc.ChangedId = cd.ID;
-                pc.GoodsId = gid;
+                pc.GoodsId = _contextGoodsID;
                 pc.Value = cd.Value;
                 pc.Quantity = cd.Quantity;
                 pc.Date = cd.Date;
@@ -123,32 +127,33 @@ namespace TaobaoTesting.GoodsManager
                 lst.Add(pc);
             }
 
+
+            return lst;
+        }
+
+        private void BindInternalChangedList(List<PageChange> lst)
+        {
+
+            
+            List<PageChange> ds = (lst.OrderByDescending(x => x.Date).Skip((this.ChangedPager.StartRecordIndex > 0 ? this.ChangedPager.StartRecordIndex - 1 : 0)).Take(ChangedPager.PageSize)).ToList();
+
+            Goods g = glogic.GetGoodsByID(_contextGoodsID);
             PageChange empty = new PageChange();
             empty.ChangedId = -1;
-            empty.GoodsId = gid;
-            empty.Quantity = goods.Quantity;
+            empty.GoodsId = _contextGoodsID;
+            empty.Quantity = g.Quantity;
             empty.Value = 0;
             empty.PieceCost = 0;
             empty.SumCost = 0;
             empty.Source = "";
             empty.Date = DateTime.Now;
-            lst.Add(empty);
-            cdl.DataSource = lst;
-            cdl.EditItemIndex = lst.Count - 1;
-            cdl.DataBind();
+            ds.Add(empty);
+            this.ChangedPager.RecordCount = ds;
+            internalChangedList.DataSource = ds;
+            internalChangedList.EditItemIndex = ds.Count - 1;
+            internalChangedList.DataBind();
+            this.ChangedPager.CustomInfoHTML = string.Format("当前第{0}/{1}页 共{2}条记录 每页{3}条", new object[] { this.ChangedPager.CurrentPageIndex, this.ChangedPager.PageCount, this.ChangedPager.RecordCount, this.ChangedPager.PageSize });
         }
-
-        protected void dlGoods_ItemCommand(object source, DataListCommandEventArgs e)
-        {
-            string itemId = e.CommandArgument.ToString();
-            if (e.CommandName == "Change")
-            {
-                DataList dl = (DataList)source;
-                dl.SelectedIndex = e.Item.ItemIndex;
-                DataListItem item = dl.Items[e.Item.ItemIndex];
-            }
-        }
-
 
         protected void InternalChangedList_ItemCommand(object source, DataListCommandEventArgs e)
         {
@@ -156,30 +161,21 @@ namespace TaobaoTesting.GoodsManager
             if (e.CommandName == "Save")
             {
                 DataList dl = (DataList)source;
+                Goods g = glogic.GetGoodsByID(_contextGoodsID);
                 DataListItem dli = e.Item;
-                dl.SelectedIndex = dli.ItemIndex;
                 TextBox lt = (TextBox)dli.FindControl("txtChangeID");
                 if (lt.Text == "0")
                 {
-                    int goodsid = int.Parse(((HiddenField)dli.FindControl("hfEditGoodsID")).Value);
-                    Goods goods = glogic.GetGoodsList().Single(x => x.ID.Equals(goodsid));
-                    Changed chg = new Changed();
+                    Changed chg = dbContext.CreateObject<Changed>();
                     chg.Quantity = decimal.Parse(((Literal)dli.FindControl("ltaQuantity")).Text);
                     chg.Value = decimal.Parse(((TextBox)dli.FindControl("txtValue")).Text);
-                    string datestring = ((TextBox)dli.FindControl("txtDate")).Text;
-                    chg.Date = DateTime.Parse(datestring);
-                    chg.UserKey = this.ContextUserKey;
-                    if (logic.AddChangedToGoods(goods, chg))
-                    {
-                        BindInternalChangedList(goodsid.ToString());
-                    }
+                    chg.Date = DateTime.Parse(((TextBox)dli.FindControl("txtDate")).Text);
+                    chg.Source = ((TextBox)dli.FindControl("txtSource")).Text;
+                    chg.Goods = g;
+                    glogic.AddChangedToGoods(g, chg);
+                    dbContext.SaveChanges();
+                    BindInternalChangedList(BuildPageList(g));
                 }
-            }
-            else if (e.CommandName == "Hide")
-            {
-                DataListItem dli = e.Item;
-                Control tr = dli.Parent.Parent.Parent;
-                tr.Visible = false;
             }
         }
     }

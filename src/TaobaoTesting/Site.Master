@@ -54,8 +54,6 @@
                                         </asp:MenuItem>
                                         <asp:MenuItem NavigateUrl="~/GoodsManager/GoodsList.aspx" Text="商品目录" Value="商品目录">
                                         </asp:MenuItem>
-                                        <asp:MenuItem NavigateUrl="~/GoodsManager/ChangedList.aspx" Text="商品库存" Value="商品库存">
-                                        </asp:MenuItem>
                                     </asp:MenuItem>
                                     <asp:MenuItem Text="订单管理" Value="订单管理">
                                         <asp:MenuItem Text="配送列表" Value="配送列表"></asp:MenuItem>

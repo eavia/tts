@@ -107,8 +107,6 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\jquery-1.4.1.js" />
     <Content Include="Scripts\jquery-1.4.1.min.js" />
-    <Content Include="Styles\style.css" />
-    <Content Include="Styles\tablecloth.css" />
     <Content Include="SettingManager\UnitList.aspx" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

@@ -102,8 +102,11 @@ namespace TaobaoTesting.GoodsManager
 
         private void BindGridView()
         {
-            dlGoods.DataSource = logic.GetGoodsList();
+            IQueryable<Goods> glst = logic.GetGoodsList();
+            this.GoodsPager.RecordCount = glst.Count();
+            dlGoods.DataSource = glst.OrderByDescending(x => x.ID).Skip((GoodsPager.StartRecordIndex > 0 ? GoodsPager.StartRecordIndex - 1 : 0)).Take(GoodsPager.PageSize);
             dlGoods.DataBind();
+            this.GoodsPager.CustomInfoHTML = string.Format("当前第{0}/{1}页 共{2}条记录 每页{3}条", new object[] { this.GoodsPager.CurrentPageIndex, this.GoodsPager.PageCount, this.GoodsPager.RecordCount, this.GoodsPager.PageSize });
         }
 
         private void BindDdpUnits()
@@ -125,13 +128,6 @@ namespace TaobaoTesting.GoodsManager
             ddlUnits.SelectedIndex = 0;
         }
 
-        protected void dlGoods_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            DataList dl = (DataList)sender;
-            string sid = ((Literal)dl.SelectedItem.FindControl("lbId")).Text;
-            Response.Redirect("Function.aspx?sid=" + sid, true);
-        }
-
         protected void dlGoods_ItemCommand(object source, DataListCommandEventArgs e)
         {
             string cmd = e.CommandName;
@@ -140,6 +136,11 @@ namespace TaobaoTesting.GoodsManager
                 DataList dl = (DataList)source;
                 dl.SelectedIndex = e.Item.ItemIndex;
             }
+        }
+
+        protected void GoodsPager_PageChanged(object sender, EventArgs e)
+        {
+            BindGridView();
         }
     }
 }

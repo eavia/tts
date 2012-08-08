@@ -414,11 +414,11 @@
         <EntityType Name="Changed" BaseType="LogicLibary.Entity">
           <Property Type="Decimal" Name="Value" Nullable="false" />
           <Property Type="DateTime" Name="Date" Nullable="false" />
-          <Property Type="Decimal" Name="Quantity" Nullable="false" />
+          <Property Type="Decimal" Name="Quantity" Nullable="false" Precision="2" />
           <NavigationProperty Name="Goods" Relationship="LogicLibary.GoodsChanged" FromRole="ChangedSet" ToRole="Goods" />
-          <Property Type="Decimal" Name="PieceCost" Nullable="false" />
+          <Property Type="Decimal" Name="PieceCost" Nullable="false" Precision="2" />
           <NavigationProperty Name="GoodsItemSet" Relationship="LogicLibary.ChangedGoodsItem" FromRole="Changed" ToRole="GoodsItem" />
-          <Property Type="Decimal" Name="SumCost" Nullable="false" />
+          <Property Type="Decimal" Name="SumCost" Nullable="false" Precision="2" />
           <Property Type="String" Name="Source" Nullable="false" />
         </EntityType>
         <Association Name="GoodsUnitGoods">

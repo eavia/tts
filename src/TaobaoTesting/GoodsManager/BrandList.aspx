@@ -69,8 +69,10 @@
             <table width="99%">
                 <tr style="height: 20px">
                     <td align="center">
-                        <webdiyer:AspNetPager ID="pgrBrandList" runat="server" Visible='<%#bool.Parse((dlGoods.Items.Count>0).ToString())%>'
-                            AlwaysShow="true" PageSize="10" OnPageChanged="pgrBrandList_PageChanged">
+                        <webdiyer:AspNetPager ID="pgrBrandList" CssClass="paginator" CurrentPageButtonClass="cpb"
+                            runat="server" AlwaysShow="True" FirstPageText="首页" LastPageText="尾页" NextPageText="下一页"
+                            PrevPageText="上一页" ShowCustomInfoSection="Left" ShowInputBox="Never" CustomInfoTextAlign="Left"
+                            LayoutType="Table" OnPageChanged="pgrBrandList_PageChanged">
                         </webdiyer:AspNetPager>
                     </td>
                 </tr>

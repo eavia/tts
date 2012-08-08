@@ -47,7 +47,6 @@
   <ItemGroup>
     <Compile Include="BaseLogic.cs" />
     <Compile Include="GoodsManager\BrandLogic.cs" />
-    <Compile Include="GoodsManager\ChangedLogic.cs" />
     <Compile Include="GoodsManager\GoodsLogic.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SettingManager\UnitLogic.cs" />

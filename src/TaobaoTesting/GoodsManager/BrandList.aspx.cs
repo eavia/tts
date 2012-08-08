@@ -20,8 +20,8 @@ namespace TaobaoTesting.GoodsManager
 
         public BrandList()
         {
-            logic = new BrandLogic(dbContext,this.ContextUserKey);
-            glogic = new GoodsLogic(dbContext,this.ContextUserKey);
+            logic = new BrandLogic(dbContext, this.ContextUserKey);
+            glogic = new GoodsLogic(dbContext, this.ContextUserKey);
         }
 
         protected void Page_Load(object sender, EventArgs e)
@@ -186,7 +186,7 @@ namespace TaobaoTesting.GoodsManager
             if (g != null && b != null)
             {
                 g.Brand = b;
-                if (dbContext.SaveChanges()>0)
+                if (dbContext.SaveChanges() > 0)
                 {
                     string id = this.trvBrand.SelectedValue;
                     int rid = int.Parse(id);
@@ -211,6 +211,7 @@ namespace TaobaoTesting.GoodsManager
             var gps = gs.OrderByDescending(x => x.ID).Skip((this.pgrBrandList.StartRecordIndex > 0 ? this.pgrBrandList.StartRecordIndex - 1 : 0)).Take(pgrBrandList.PageSize);
             this.dlGoods.DataSource = gps;
             this.dlGoods.DataBind();
+            this.pgrBrandList.CustomInfoHTML = string.Format("当前第{0}/{1}页 共{2}条记录 每页{3}条", new object[] { this.pgrBrandList.CurrentPageIndex, this.pgrBrandList.PageCount, this.pgrBrandList.RecordCount, this.pgrBrandList.PageSize });
         }
 
         protected void dlGoods_ItemDataBound(object sender, DataListItemEventArgs e)
