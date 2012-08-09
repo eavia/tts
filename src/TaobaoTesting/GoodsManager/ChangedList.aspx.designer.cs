@@ -31,6 +31,15 @@ namespace TaobaoTesting.GoodsManager {
         protected global::System.Web.UI.WebControls.HiddenField hfdGoodsID;
         
         /// <summary>
+        /// hfdChangedID 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.HiddenField hfdChangedID;
+        
+        /// <summary>
         /// internalChangedList 控件。
         /// </summary>
         /// <remarks>
@@ -49,12 +58,21 @@ namespace TaobaoTesting.GoodsManager {
         protected global::Wuqi.Webdiyer.AspNetPager ChangedPager;
         
         /// <summary>
-        /// DataList1 控件。
+        /// dlChangedItems 控件。
         /// </summary>
         /// <remarks>
         /// 自动生成的字段。
         /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DataList DataList1;
+        protected global::System.Web.UI.WebControls.DataList dlChangedItems;
+        
+        /// <summary>
+        /// ItemPager 控件。
+        /// </summary>
+        /// <remarks>
+        /// 自动生成的字段。
+        /// 若要进行修改，请将字段声明从设计器文件移到代码隐藏文件。
+        /// </remarks>
+        protected global::Wuqi.Webdiyer.AspNetPager ItemPager;
     }
 }

@@ -61,6 +61,21 @@ namespace LogicLibary.GoodsManager
             return g;
         }
 
+        public Changed GetChangedByID(int id)
+        {
+            Changed c = null;
+            try
+            {
+                c = this.ObjectContext.EntitySet.OfType<Changed>().Single(cc => cc.ID.Equals(id) && cc.UserKey.Equals(this.ContextUserKey));
+            }
+            catch
+            {
+
+            }
+            return c;
+        }
+
+
         public bool AddChangedToGoods(Goods g, Changed c)
         {
             try
