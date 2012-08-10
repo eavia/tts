@@ -23,7 +23,7 @@
         </asp:Panel>
         <asp:Panel ID="pelList" runat="server">
             <asp:DataList Width="99%" ID="dlGoods" runat="server" ExtractTemplateRows="true"
-                CellPadding="2" DataKeyField="ID" GridLines="Both" OnItemDataBound="dlGoods_ItemDataBound">
+                CellPadding="2" DataKeyField="ID" GridLines="Both" OnItemDataBound="dlGoods_ItemDataBound" >
                 <ItemStyle ForeColor="Black" Height="30px" />
                 <FooterStyle BackColor="#C6C3C6" ForeColor="Black" />
                 <HeaderStyle BackColor="#A6CBEF" Font-Bold="True" ForeColor="#404040" BorderColor="#A6CBEF"
@@ -38,15 +38,6 @@
                         </asp:TableHeaderRow>
                     </asp:Table>
                 </HeaderTemplate>
-                <FooterTemplate>
-                    <asp:Table ID="tabFooter" runat="server">
-                        <asp:TableFooterRow Height="30px">
-                            <asp:TableCell HorizontalAlign="Center" VerticalAlign="Middle" ColumnSpan="4">
-                                <asp:Label ID="lblEmpty" runat="server" Text="无记录.." Visible='<%#bool.Parse((dlGoods.Items.Count==0).ToString())%>'></asp:Label>
-                            </asp:TableCell>
-                        </asp:TableFooterRow>
-                    </asp:Table>
-                </FooterTemplate>
                 <HeaderStyle Height="25px" />
                 <ItemStyle Height="30px" />
                 <ItemTemplate>

@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 08/07/2012 16:10:54
+-- Date Created: 08/10/2012 08:55:53
 -- Generated from EDMX file: D:\Source\src\LogicLibary\StoreDb.edmx
 -- --------------------------------------------------
 
@@ -165,7 +165,7 @@ GO
 CREATE TABLE [dbo].[EntitySet_Price] (
     [Value] decimal(18,0)  NOT NULL,
     [BeforeTax] bit  NOT NULL,
-    [DiscountLimits] decimal(18,0)  NOT NULL,
+    [DiscountLimit] decimal(18,0)  NOT NULL,
     [ID] int  NOT NULL,
     [Goods_ID] int  NOT NULL
 );

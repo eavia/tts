@@ -220,5 +220,17 @@ namespace TaobaoTesting.GoodsManager
         {
             BindItemsWithCID(_contextChangedID);
         }
+
+        protected void dlChangedItems_UpdateCommand(object source, DataListCommandEventArgs e)
+        {
+            Changed c = glogic.GetChangedByID(_contextChangedID);
+            DataListItem dit = e.Item;
+            GoodsItem item = new GoodsItem();
+            item.Goods = c.Goods;
+            item.ItemIdenifity = ((TextBox)dit.FindControl("txtIdenifity")).Text;
+            item.ProductionDate = DateTime.Parse(((TextBox)dit.FindControl("txtProductionDate")).Text);
+            item.ExpiryDate = DateTime.Parse(((TextBox)dit.FindControl("txtExpiryDate")).Text);
+            item.Quantity = decimal.Parse(((TextBox)dit.FindControl("txtQuantity")).Text);
+        }
     }
 }

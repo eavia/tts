@@ -72,7 +72,7 @@
 
                 //alert("输入值：" + v);
 
-                var reg = new RegExp("^[0-9]+(.[0-9]{1})?$", "g");
+                var reg = new RegExp("^[0-9]+(.[0-9]{2})?$", "g");
 
                 if (!reg.test(v)) {
 
@@ -167,11 +167,12 @@
         </div>
         <hr />
         <asp:DataList Width="100%" ID="dlChangedItems" runat="server" ExtractTemplateRows="true"
-            CellPadding="2" DataKeyField="ID" GridLines="Both" CssClass="margin:0px 0px 0px 0px; padding:0px 0px 0px 0px;">
-            <HeaderTemplate>
+            CellPadding="2" DataKeyField="ID" GridLines="Both" 
+            CssClass="margin:0px 0px 0px 0px; padding:0px 0px 0px 0px;" 
+            onupdatecommand="dlChangedItems_UpdateCommand"><HeaderTemplate>
                 <asp:Table ID="tabHeader" runat="server">
                     <asp:TableRow>
-                        <asp:TableHeaderCell Width="45px">序号</asp:TableHeaderCell><asp:TableHeaderCell Width="60px">编号</asp:TableHeaderCell><asp:TableHeaderCell Width="90px">标识</asp:TableHeaderCell><asp:TableHeaderCell Width="70px">出厂日期</asp:TableHeaderCell><asp:TableHeaderCell Width="70px">有效期限</asp:TableHeaderCell><asp:TableHeaderCell Width="60px">数量</asp:TableHeaderCell></asp:TableRow></asp:Table></HeaderTemplate><ItemStyle ForeColor="Black" Height="30px" />
+                        <asp:TableHeaderCell Width="45px">序号</asp:TableHeaderCell><asp:TableHeaderCell Width="60px">编号</asp:TableHeaderCell><asp:TableHeaderCell Width="120px">标识</asp:TableHeaderCell><asp:TableHeaderCell Width="70px">出厂日期</asp:TableHeaderCell><asp:TableHeaderCell Width="70px">有效期限</asp:TableHeaderCell><asp:TableHeaderCell Width="60px">数量</asp:TableHeaderCell><asp:TableHeaderCell Width="70px">操作</asp:TableHeaderCell></asp:TableRow></asp:Table></HeaderTemplate><ItemStyle ForeColor="Black" Height="30px" />
             <FooterStyle BackColor="#C6C3C6" ForeColor="Black" />
             <HeaderStyle BackColor="#A6CBEF" Font-Bold="True" ForeColor="#404040" BorderColor="#A6CBEF"
                 Height="25px" />
@@ -190,6 +191,8 @@
                             <asp:Literal ID="ltaPieceCost" runat="server" Text='<%#Eval("ExpiryDate")%>' />
                         </asp:TableCell><asp:TableCell>
                             <asp:Literal ID="ltaSumCost" runat="server" Text='<%#Eval("Quantity")%>' />
+                        </asp:TableCell><asp:TableCell>
+                            <asp:Literal ID="Literal1" runat="server" Text='<%#Eval("Quantity")%>' />
                         </asp:TableCell></asp:TableRow></asp:Table></ItemTemplate><EditItemTemplate>
                 <asp:Table ID="tabEditItem" runat="server">
                     <asp:TableRow>
@@ -205,9 +208,12 @@
                                 Width="98%" CssClass="textBoxLine" onclick="WdatePicker();"></asp:TextBox>
                         </asp:TableCell><asp:TableCell>
                             <asp:TextBox ID="txtExpiryDate" runat="server" CssClass="textBoxLine" Width="98%"
-                                Text='<%#Eval("ExpiryDate")%>' onclick="WdatePicker();"></asp:TextBox></asp:TableCell><asp:TableCell>
+                                Text='<%#Eval("ExpiryDate")%>' onclick="WdatePicker();"></asp:TextBox>
+                        </asp:TableCell><asp:TableCell>
                             <asp:TextBox ID="txtQuantity" runat="server" CssClass="textBoxLine" Text='<%#Eval("Quantity")%>'
                                 Width="98%"></asp:TextBox>
+                        </asp:TableCell><asp:TableCell>
+                            <asp:LinkButton ID="ItemSave" runat="Server" Text="保存" CommandName="Update" AutoPostBack="True" />
                         </asp:TableCell></asp:TableRow></asp:Table></EditItemTemplate></asp:DataList><webdiyer:AspNetPager ID="ItemPager" CssClass="paginator" CurrentPageButtonClass="cpb"
             runat="server" AlwaysShow="True" FirstPageText="首页" LastPageText="尾页" NextPageText="下一页"
             PrevPageText="上一页" ShowCustomInfoSection="Left" ShowInputBox="Never" CustomInfoTextAlign="Left"

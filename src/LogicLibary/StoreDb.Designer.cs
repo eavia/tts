@@ -322,10 +322,8 @@ namespace LogicLibary
         /// <param name="value">Value 属性的初始值。</param>
         /// <param name="date">Date 属性的初始值。</param>
         /// <param name="quantity">Quantity 属性的初始值。</param>
-        /// <param name="pieceCost">PieceCost 属性的初始值。</param>
-        /// <param name="sumCost">SumCost 属性的初始值。</param>
         /// <param name="source">Source 属性的初始值。</param>
-        public static Changed CreateChanged(global::System.Int32 id, global::System.String userKey, global::System.DateTime modified, global::System.Decimal value, global::System.DateTime date, global::System.Decimal quantity, global::System.Decimal pieceCost, global::System.Decimal sumCost, global::System.String source)
+        public static Changed CreateChanged(global::System.Int32 id, global::System.String userKey, global::System.DateTime modified, global::System.Decimal value, global::System.DateTime date, global::System.Decimal quantity, global::System.String source)
         {
             Changed changed = new Changed();
             changed.ID = id;
@@ -334,8 +332,6 @@ namespace LogicLibary
             changed.Value = value;
             changed.Date = date;
             changed.Quantity = quantity;
-            changed.PieceCost = pieceCost;
-            changed.SumCost = sumCost;
             changed.Source = source;
             return changed;
         }
@@ -435,7 +431,7 @@ namespace LogicLibary
                 OnPieceCostChanged();
             }
         }
-        private global::System.Decimal _PieceCost;
+        private global::System.Decimal _PieceCost = 0.0m;
         partial void OnPieceCostChanging(global::System.Decimal value);
         partial void OnPieceCostChanged();
     
@@ -459,7 +455,7 @@ namespace LogicLibary
                 OnSumCostChanged();
             }
         }
-        private global::System.Decimal _SumCost;
+        private global::System.Decimal _SumCost = 0.0m;
         partial void OnSumCostChanging(global::System.Decimal value);
         partial void OnSumCostChanged();
     
@@ -922,7 +918,7 @@ namespace LogicLibary
         /// <param name="productionDate">ProductionDate 属性的初始值。</param>
         /// <param name="expiryDate">ExpiryDate 属性的初始值。</param>
         /// <param name="quantity">Quantity 属性的初始值。</param>
-        public static GoodsItem CreateGoodsItem(global::System.Int32 id, global::System.String userKey, global::System.DateTime modified, global::System.String itemIdenifity, global::System.String productionDate, global::System.String expiryDate, global::System.Decimal quantity)
+        public static GoodsItem CreateGoodsItem(global::System.Int32 id, global::System.String userKey, global::System.DateTime modified, global::System.String itemIdenifity, global::System.DateTime productionDate, global::System.DateTime expiryDate, global::System.Decimal quantity)
         {
             GoodsItem goodsItem = new GoodsItem();
             goodsItem.ID = id;
@@ -967,7 +963,7 @@ namespace LogicLibary
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String ProductionDate
+        public global::System.DateTime ProductionDate
         {
             get
             {
@@ -977,13 +973,13 @@ namespace LogicLibary
             {
                 OnProductionDateChanging(value);
                 ReportPropertyChanging("ProductionDate");
-                _ProductionDate = StructuralObject.SetValidValue(value, false);
+                _ProductionDate = StructuralObject.SetValidValue(value);
                 ReportPropertyChanged("ProductionDate");
                 OnProductionDateChanged();
             }
         }
-        private global::System.String _ProductionDate;
-        partial void OnProductionDateChanging(global::System.String value);
+        private global::System.DateTime _ProductionDate;
+        partial void OnProductionDateChanging(global::System.DateTime value);
         partial void OnProductionDateChanged();
     
         /// <summary>
@@ -991,7 +987,7 @@ namespace LogicLibary
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String ExpiryDate
+        public global::System.DateTime ExpiryDate
         {
             get
             {
@@ -1001,13 +997,13 @@ namespace LogicLibary
             {
                 OnExpiryDateChanging(value);
                 ReportPropertyChanging("ExpiryDate");
-                _ExpiryDate = StructuralObject.SetValidValue(value, false);
+                _ExpiryDate = StructuralObject.SetValidValue(value);
                 ReportPropertyChanged("ExpiryDate");
                 OnExpiryDateChanged();
             }
         }
-        private global::System.String _ExpiryDate;
-        partial void OnExpiryDateChanging(global::System.String value);
+        private global::System.DateTime _ExpiryDate;
+        partial void OnExpiryDateChanging(global::System.DateTime value);
         partial void OnExpiryDateChanged();
     
         /// <summary>
@@ -1520,8 +1516,8 @@ namespace LogicLibary
         /// <param name="modified">Modified 属性的初始值。</param>
         /// <param name="value">Value 属性的初始值。</param>
         /// <param name="beforeTax">BeforeTax 属性的初始值。</param>
-        /// <param name="discountLimits">DiscountLimits 属性的初始值。</param>
-        public static Price CreatePrice(global::System.Int32 id, global::System.String userKey, global::System.DateTime modified, global::System.Decimal value, global::System.Boolean beforeTax, global::System.Decimal discountLimits)
+        /// <param name="discountLimit">DiscountLimit 属性的初始值。</param>
+        public static Price CreatePrice(global::System.Int32 id, global::System.String userKey, global::System.DateTime modified, global::System.Decimal value, global::System.Boolean beforeTax, global::System.Decimal discountLimit)
         {
             Price price = new Price();
             price.ID = id;
@@ -1529,7 +1525,7 @@ namespace LogicLibary
             price.Modified = modified;
             price.Value = value;
             price.BeforeTax = beforeTax;
-            price.DiscountLimits = discountLimits;
+            price.DiscountLimit = discountLimit;
             return price;
         }
 
@@ -1589,24 +1585,24 @@ namespace LogicLibary
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Decimal DiscountLimits
+        public global::System.Decimal DiscountLimit
         {
             get
             {
-                return _DiscountLimits;
+                return _DiscountLimit;
             }
             set
             {
-                OnDiscountLimitsChanging(value);
-                ReportPropertyChanging("DiscountLimits");
-                _DiscountLimits = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("DiscountLimits");
-                OnDiscountLimitsChanged();
+                OnDiscountLimitChanging(value);
+                ReportPropertyChanging("DiscountLimit");
+                _DiscountLimit = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DiscountLimit");
+                OnDiscountLimitChanged();
             }
         }
-        private global::System.Decimal _DiscountLimits;
-        partial void OnDiscountLimitsChanging(global::System.Decimal value);
-        partial void OnDiscountLimitsChanged();
+        private global::System.Decimal _DiscountLimit;
+        partial void OnDiscountLimitChanging(global::System.Decimal value);
+        partial void OnDiscountLimitChanged();
 
         #endregion
     
