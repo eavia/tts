@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, and Azure
 -- --------------------------------------------------
--- Date Created: 08/10/2012 08:55:53
+-- Date Created: 08/13/2012 08:57:21
 -- Generated from EDMX file: D:\Source\src\LogicLibary\StoreDb.edmx
 -- --------------------------------------------------
 
@@ -174,8 +174,8 @@ GO
 -- Creating table 'EntitySet_GoodsItem'
 CREATE TABLE [dbo].[EntitySet_GoodsItem] (
     [ItemIdenifity] nvarchar(max)  NOT NULL,
-    [ProductionDate] nvarchar(max)  NOT NULL,
-    [ExpiryDate] nvarchar(max)  NOT NULL,
+    [ProductionDate] datetime  NOT NULL,
+    [ExpiryDate] datetime  NOT NULL,
     [Quantity] decimal(18,0)  NOT NULL,
     [ID] int  NOT NULL,
     [Goods_ID] int  NOT NULL,

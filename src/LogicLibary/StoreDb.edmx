@@ -152,8 +152,8 @@
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ItemIdenifity" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="ProductionDate" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="ExpiryDate" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ProductionDate" Type="datetime" Nullable="false" />
+    <Property Name="ExpiryDate" Type="datetime" Nullable="false" />
     <Property Name="Quantity" Type="decimal" Nullable="false" />
     <Property Name="ID" Type="int" Nullable="false" />
     <Property Name="Goods_ID" Type="int" Nullable="false" />

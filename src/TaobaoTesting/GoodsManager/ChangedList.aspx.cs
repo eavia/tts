@@ -15,7 +15,22 @@ namespace TaobaoTesting.GoodsManager
     {
         private GoodsLogic glogic;
 
-        private StoreEntities dbContext = new StoreEntities();
+        private StoreEntities dbContext;
+
+        private void GetSource()
+        {
+            StoreEntities tmp = null;
+            if (ViewState["ChangedDataSource"] == null)
+            {
+                tmp = new StoreEntities();
+                ViewState["ChangedDataSource"] = tmp;
+            }
+            else
+            {
+                tmp = (StoreEntities)ViewState["ChangedDataSource"];
+            }
+            dbContext = tmp;
+        }
 
         internal class PageChange
         {
@@ -85,6 +100,7 @@ namespace TaobaoTesting.GoodsManager
 
         public ChangedList()
         {
+            GetSource();
             glogic = new GoodsLogic(dbContext, this.ContextUserKey);
         }
 
@@ -209,7 +225,6 @@ namespace TaobaoTesting.GoodsManager
             dlChangedItems.DataBind();
             this.ItemPager.CustomInfoHTML = string.Format("当前第{0}/{1}页 共{2}条记录 每页{3}条", new object[] { this.ItemPager.CurrentPageIndex, this.ItemPager.PageCount, this.ItemPager.RecordCount, this.ItemPager.PageSize });
         }
-
 
         protected void ChangedPager_PageChanged(object sender, EventArgs e)
         {
