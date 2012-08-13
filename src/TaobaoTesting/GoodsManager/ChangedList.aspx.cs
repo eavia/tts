@@ -118,7 +118,6 @@ namespace TaobaoTesting.GoodsManager
                 _contextGoodsID = int.Parse(hfdGoodsID.Value);
                 BindInternalChangedList(_contextGoodsID);
                 _contextChangedID = int.Parse(hfdChangedID.Value);
-                BindItemsWithCID(_contextChangedID);
             }
             else
             {
@@ -196,35 +195,43 @@ namespace TaobaoTesting.GoodsManager
             {
                 DataList dl = (DataList)source;
                 dl.SelectedIndex = e.Item.ItemIndex;
-                hfdChangedID.Value = e.CommandArgument.ToString();
-                int id = int.Parse(e.CommandArgument.ToString());
-                BindItemsWithCID(id);
+                Changed c = null;
+                if (!hfdChangedID.Value.Equals(e.CommandArgument.ToString()))
+                {
+                    hfdChangedID.Value = e.CommandArgument.ToString();
+                    int id = int.Parse(e.CommandArgument.ToString());
+                    c = glogic.GetChangedByID(id);
+                    ViewState.Add("PageSeletedChanged", c);
+                }
+                else
+                {
+                    c = (Changed)ViewState["PageSeletedChanged"];
+                }
+                BindItemsWithCID(c);
             }
         }
 
-        protected void BindItemsWithCID(int id)
+        protected void BindItemsWithCID(Changed c)
         {
-            Changed c = glogic.GetChangedByID(id);
-            List<GoodsItem> ils = null;
-            if (c == null)
+
+            List<GoodsItem> lst = null;
+            if (c.GoodsItemSet.Count == 0)
             {
-                this.ItemPager.RecordCount = 0;
-                ils = new List<GoodsItem>();
+                lst = new List<GoodsItem>();
             }
             else
             {
-                this.ItemPager.RecordCount = c.GoodsItemSet.Count();
-                var ds = c.GoodsItemSet.OrderByDescending(x => x.ID)
-                    .Skip((this.ItemPager.StartRecordIndex > 0 ? this.ItemPager.StartRecordIndex - 1 : 0)).Take(ItemPager.PageSize);
-                ils = ds.ToList();
-                GoodsItem item = new GoodsItem();
-                ils.Add(item);
+                lst = c.GoodsItemSet.ToList();
             }
 
-            dlChangedItems.DataSource = ils;
-            dlChangedItems.EditItemIndex = ils.Count() - 1;
+
+            GoodsItem item = new GoodsItem();
+            lst.Add(item);
+
+
+            dlChangedItems.DataSource = lst;
+            dlChangedItems.EditItemIndex = lst.Count() - 1;
             dlChangedItems.DataBind();
-            this.ItemPager.CustomInfoHTML = string.Format("当前第{0}/{1}页 共{2}条记录 每页{3}条", new object[] { this.ItemPager.CurrentPageIndex, this.ItemPager.PageCount, this.ItemPager.RecordCount, this.ItemPager.PageSize });
         }
 
         protected void ChangedPager_PageChanged(object sender, EventArgs e)
@@ -232,14 +239,9 @@ namespace TaobaoTesting.GoodsManager
             BindInternalChangedList(_contextGoodsID);
         }
 
-        protected void ItemPager_PageChanged(object sender, EventArgs e)
-        {
-            BindItemsWithCID(_contextChangedID);
-        }
-
         protected void dlChangedItems_UpdateCommand(object source, DataListCommandEventArgs e)
         {
-            Changed c = glogic.GetChangedByID(_contextChangedID);
+            Changed c = (Changed)ViewState["PageSeletedChanged"];
             DataListItem dit = e.Item;
             GoodsItem item = new GoodsItem();
             item.Goods = c.Goods;
@@ -250,9 +252,18 @@ namespace TaobaoTesting.GoodsManager
             c.GoodsItemSet.Add(item);
             c.Value = c.GoodsItemSet.Sum(x => x.Quantity);
             c.SumCost = c.GoodsItemSet.Sum(x => x.Quantity * c.PieceCost);
-            
+
             BindInternalChangedList(_contextGoodsID);
-            BindItemsWithCID(_contextChangedID);
+        }
+
+        protected void btnSaveAll_Click(object sender, EventArgs e)
+        {
+            Goods g = glogic.GetGoodsByID(_contextGoodsID);
+            Changed c = glogic.GetChangedByID(_contextChangedID);
+            g.ChangedSet.Load();
+            g.Quantity = g.ChangedSet.Sum<Changed>(v => v.Value);
+            this.dbContext.SaveChanges();
+            this.dbContext.AcceptAllChanges();
         }
     }
 }
