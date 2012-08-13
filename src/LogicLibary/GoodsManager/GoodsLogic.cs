@@ -75,6 +75,33 @@ namespace LogicLibary.GoodsManager
             return c;
         }
 
+        public bool UpdateingGoodsWithChanged(Goods g, Changed c)
+        {
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+
+                    c.Value = c.GoodsItemSet.Sum(x => x.Quantity);
+                    c.SumCost = c.GoodsItemSet.Sum(p => (decimal)p.Quantity * c.PieceCost);
+                    this.ObjectContext.SaveChanges();
+
+                    g.Quantity = g.Quantity + c.Value;
+                    this.ObjectContext.SaveChanges();
+
+
+                    scope.Complete();
+                    this.ObjectContext.AcceptAllChanges();
+                    return true;
+                }
+            }
+            catch
+            {
+
+            }
+            return false;
+        }
+
 
         public bool AddChangedToGoods(Goods g, Changed c)
         {

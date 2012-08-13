@@ -138,7 +138,10 @@
                                             <asp:Literal ID="ltaPieceCost" runat="server" Text='<%#Eval("PieceCost")%>'></asp:Literal></asp:TableCell><asp:TableCell>
                                                 <asp:Literal ID="ltaSumCost" runat="server" Text='<%#Eval("SumCost")%>'></asp:Literal></asp:TableCell><asp:TableCell>
                                                     <asp:Literal ID="ltaSource" runat="server" Text='<%#Eval("Source")%>'></asp:Literal></asp:TableCell><asp:TableCell>
-                                                        <asp:Literal ID="ltaDate" runat="server" Text='<%#Convert.ToDateTime(Eval("Date")).ToShortDateString()%>'></asp:Literal></asp:TableCell><asp:TableCell></asp:TableCell></asp:TableRow></asp:Table></ItemTemplate><EditItemTemplate>
+                                                        <asp:Literal ID="ltaDate" runat="server" Text='<%#Convert.ToDateTime(Eval("Date")).ToShortDateString()%>'></asp:Literal></asp:TableCell><asp:TableCell></asp:TableCell></asp:TableRow>
+                    </asp:Table>
+                </ItemTemplate>
+                <EditItemTemplate>
                     <asp:Table ID="tabEditItem" runat="server">
                         <asp:TableRow>
                             <asp:TableCell>
@@ -159,7 +162,10 @@
                                                                 <asp:TextBox ID="txtDate" runat="server" CssClass="textBoxLine" Text='<%#Convert.ToDateTime(Eval("Date")).ToShortDateString()%>'
                                                                     onclick="WdatePicker();" Width="98%"></asp:TextBox></asp:TableCell><asp:TableCell>
                                                                         <asp:LinkButton ID="lnkSave" runat="server" CommandName="Save" CommandArgument='<%#Eval("GoodsId")%>'>保存</asp:LinkButton>
-                                                                    </asp:TableCell></asp:TableRow></asp:Table></EditItemTemplate></asp:DataList><webdiyer:AspNetPager ID="ChangedPager" CssClass="paginator" CurrentPageButtonClass="cpb"
+                                                                    </asp:TableCell></asp:TableRow>
+                    </asp:Table>
+                </EditItemTemplate>
+            </asp:DataList><webdiyer:AspNetPager ID="ChangedPager" CssClass="paginator" CurrentPageButtonClass="cpb"
                 runat="server" AlwaysShow="True" FirstPageText="首页" LastPageText="尾页" NextPageText="下一页"
                 PrevPageText="上一页" ShowCustomInfoSection="Left" ShowInputBox="Never" CustomInfoTextAlign="Left"
                 LayoutType="Table" OnPageChanged="ChangedPager_PageChanged" PageSize="5">
@@ -168,20 +174,24 @@
         <hr />
         <asp:DataList Width="100%" ID="dlChangedItems" runat="server" ExtractTemplateRows="true"
             CellPadding="2" DataKeyField="ID" GridLines="Both" CssClass="margin:0px 0px 0px 0px; padding:0px 0px 0px 0px;"
-            OnUpdateCommand="dlChangedItems_UpdateCommand">
+            OnUpdateCommand="dlChangedItems_UpdateCommand" OnCancelCommand="dlChangedItems_CancelCommand">
             <HeaderTemplate>
                 <asp:Table ID="tabHeader" runat="server">
                     <asp:TableRow>
                         <asp:TableHeaderCell Width="45px">序号</asp:TableHeaderCell><asp:TableHeaderCell Width="60px">编号</asp:TableHeaderCell><asp:TableHeaderCell
                             Width="120px">标识</asp:TableHeaderCell><asp:TableHeaderCell Width="70px">出厂日期</asp:TableHeaderCell><asp:TableHeaderCell
                                 Width="70px">有效期限</asp:TableHeaderCell><asp:TableHeaderCell Width="60px">数量</asp:TableHeaderCell><asp:TableHeaderCell
-                                    Width="70px">操作</asp:TableHeaderCell></asp:TableRow></asp:Table></HeaderTemplate><ItemStyle ForeColor="Black" Height="30px" />
+                                    Width="70px">操作</asp:TableHeaderCell></asp:TableRow>
+                </asp:Table>
+            </HeaderTemplate>
+            <ItemStyle ForeColor="Black" Height="30px" />
             <FooterStyle BackColor="#C6C3C6" ForeColor="Black" />
             <HeaderStyle BackColor="#A6CBEF" Font-Bold="True" ForeColor="#404040" BorderColor="#A6CBEF"
                 Height="25px" />
             <ItemTemplate>
                 <asp:Table ID="tabItem" runat="server">
-                    <asp:TableRow>
+                    <asp:TableRow onmouseover="c=this.style.backgroundColor;this.style.backgroundColor='#6699ff'"
+                        onmouseout="this.style.backgroundColor=c" Style="background-color: Silver">
                         <asp:TableCell>
                             <asp:Literal ID="ltaIndex" runat="server" Text='<%#Container.ItemIndex+1%>' />
                         </asp:TableCell><asp:TableCell>
@@ -196,7 +206,10 @@
                             <asp:Literal ID="ltaSumCost" runat="server" Text='<%#Eval("Quantity")%>' />
                         </asp:TableCell><asp:TableCell>
                             <asp:Literal ID="Literal1" runat="server" Text='<%#Eval("Quantity")%>' />
-                        </asp:TableCell></asp:TableRow></asp:Table></ItemTemplate><EditItemTemplate>
+                        </asp:TableCell></asp:TableRow>
+                </asp:Table>
+            </ItemTemplate>
+            <EditItemTemplate>
                 <asp:Table ID="tabEditItem" runat="server">
                     <asp:TableRow>
                         <asp:TableCell>
@@ -216,10 +229,17 @@
                             <asp:TextBox ID="txtQuantity" runat="server" CssClass="textBoxLine" Text='<%#Eval("Quantity")%>'
                                 Width="98%"></asp:TextBox>
                         </asp:TableCell><asp:TableCell>
-                            <asp:LinkButton ID="ItemSave" runat="Server" Text="保存" CommandName="Update" AutoPostBack="True" />
-                        </asp:TableCell></asp:TableRow></asp:Table></EditItemTemplate></asp:DataList><asp:Panel ID="ToolBar" runat="Server" BorderWidth="1px" BorderStyle="Solid" ScrollBars="None"
-            Width="99%" Style="vertical-align: middle;" Height="32px" HorizontalAlign="Center"
+                            <asp:LinkButton ID="ItemSave" runat="Server" Text="确定" CommandName="Update" />
+                            <asp:LinkButton ID="ItemCancel" runat="Server" Text="取消" CommandName="Cancel" />
+                        </asp:TableCell></asp:TableRow>
+                </asp:Table>
+            </EditItemTemplate>
+        </asp:DataList><asp:Panel ID="ToolBar" runat="Server" BorderWidth="1px" BorderStyle="Solid"
+            ScrollBars="None" Width="99%" Style="vertical-align: middle;" Height="32px" HorizontalAlign="Center"
             CssClass="menu">
-            <asp:Button ID="btnSaveAll" runat="server" Text="保存" 
-                Style="margin: 5px 2px 2px 2px;" onclick="btnSaveAll_Click" /><asp:LinkButton
-                ID="lnkCancel" runat="server" Style="margin: 5px 2px 2px 2px;">关闭</asp:LinkButton></asp:Panel></div></form></body></html>
+            <asp:Button ID="btnSaveAll" runat="server" Text="保存" Style="margin: 5px 2px 2px 2px;"
+                OnClick="btnSaveAll_Click" /><asp:LinkButton ID="lnkCancel" runat="server" Style="margin: 5px 2px 2px 2px;">关闭</asp:LinkButton></asp:Panel>
+    </div>
+    </form>
+</body>
+</html>

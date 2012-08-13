@@ -226,6 +226,8 @@ namespace TaobaoTesting.GoodsManager
 
 
             GoodsItem item = new GoodsItem();
+            item.ProductionDate = DateTime.Now;
+            item.ExpiryDate = item.ProductionDate.AddMonths(12);
             lst.Add(item);
 
 
@@ -252,18 +254,25 @@ namespace TaobaoTesting.GoodsManager
             c.GoodsItemSet.Add(item);
             c.Value = c.GoodsItemSet.Sum(x => x.Quantity);
             c.SumCost = c.GoodsItemSet.Sum(x => x.Quantity * c.PieceCost);
-
+            ViewState["PageSeletedChanged"] = c;
             BindInternalChangedList(_contextGoodsID);
+            BindItemsWithCID(c);
         }
 
         protected void btnSaveAll_Click(object sender, EventArgs e)
         {
             Goods g = glogic.GetGoodsByID(_contextGoodsID);
-            Changed c = glogic.GetChangedByID(_contextChangedID);
-            g.ChangedSet.Load();
-            g.Quantity = g.ChangedSet.Sum<Changed>(v => v.Value);
-            this.dbContext.SaveChanges();
-            this.dbContext.AcceptAllChanges();
+            Changed c = (Changed)ViewState["PageSeletedChanged"]; //获取页面上的进货单
+            if (glogic.UpdateingGoodsWithChanged(g, c))
+            {
+                throw new Exception("保存失败!");
+            }
+        }
+
+        protected void dlChangedItems_CancelCommand(object source, DataListCommandEventArgs e)
+        {
+            Changed c = (Changed)ViewState["PageSeletedChanged"];
+            BindItemsWithCID(c);
         }
     }
 }
