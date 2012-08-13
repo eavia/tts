@@ -8,6 +8,7 @@ using LogicLibary;
 using LogicLibary.GoodsManager;
 using LogicLibary.SettingManager;
 using System.Data.Objects;
+using System.Data;
 
 namespace TaobaoTesting.GoodsManager
 {
@@ -246,6 +247,12 @@ namespace TaobaoTesting.GoodsManager
             item.ProductionDate = DateTime.Parse(((TextBox)dit.FindControl("txtProductionDate")).Text);
             item.ExpiryDate = DateTime.Parse(((TextBox)dit.FindControl("txtExpiryDate")).Text);
             item.Quantity = decimal.Parse(((TextBox)dit.FindControl("txtQuantity")).Text);
+            c.GoodsItemSet.Add(item);
+            c.Value = c.GoodsItemSet.Sum(x => x.Quantity);
+            c.SumCost = c.GoodsItemSet.Sum(x => x.Quantity * c.PieceCost);
+            
+            BindInternalChangedList(_contextGoodsID);
+            BindItemsWithCID(_contextChangedID);
         }
     }
 }
