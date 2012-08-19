@@ -73,8 +73,8 @@
                             <asp:TableCell>
                                 <asp:Literal ID="ltaUnit" runat="server" Text='<%#Eval("Unit.UnitName")%>'></asp:Literal></asp:TableCell>
                             <asp:TableCell>
-                                <asp:LinkButton ID="LinkButton1" runat="Server" OnClientClick="return ShowBox(this);"
-                                    src='<%#"ChangedList.aspx?gid="+Eval("ID") %>' Text='变动<%#Container.ItemIndex+1%>' CommandName="Changed"></asp:LinkButton>
+                                <asp:LinkButton ID="lnkModified" runat="Server" PostBackUrl='<%#"ChangeList.aspx?gid="+Eval("ID") %>'
+                                    Text='变动<%#Container.ItemIndex+1%>' CommandName="Changed"></asp:LinkButton>
                                 <asp:LinkButton ID="lnkDelete" runat="server" CommandArgument='<%#Eval("ID")%>' CommandName="Delete">删除</asp:LinkButton>
                             </asp:TableCell>
                         </asp:TableRow>

@@ -5,27 +5,56 @@ using System.Web;
 using System.Web.Security;
 using System.Text;
 using System.Web.UI.WebControls;
+using LogicLibary;
+using System.Collections;
 
 namespace TaobaoTesting
 {
     public class BasePage : System.Web.UI.Page
     {
+
         public String ContextUserKey
         {
             private set;
             get;
         }
+
         public BasePage()
         {
             MembershipUser u = Membership.GetUser(User.Identity.Name);
             ContextUserKey = u.ProviderUserKey.ToString();
         }
-        protected override void OnPreLoad(EventArgs e)
+
+        Hashtable valueOfPage;
+
+        public Hashtable ValueOfPage
         {
-            base.OnPreLoad(e);
-            if (IsPostBack)
+            get
             {
-                string value = this.Request.Params["NextPostHandler"];
+                return valueOfPage;
+            }
+        }
+
+        protected override void OnUnload(EventArgs e)
+        {
+            base.OnUnload(e);
+            ViewState.Remove("Page_" + this.Page.ClientID + "_Value");
+            if (valueOfPage != null && valueOfPage.Count != 0)
+            {
+                ViewState.Add("Page_" + this.Page.ClientID + "_Value", valueOfPage);
+            }
+        }
+
+        protected override void OnInit(EventArgs e)
+        {
+            base.OnInitComplete(e);
+            if (ViewState["Page_" + this.Page.ClientID + "_Value"] != null)
+            {
+                valueOfPage = (Hashtable)ViewState["Page_" + this.Page.ClientID + "_Value"];
+            }
+            else
+            {
+                valueOfPage = new Hashtable();
             }
         }
 
