@@ -7,6 +7,12 @@
     <title>商品库存信息</title>
     <script src="../Scripts/jquery-1.4.1.min.js" type="text/javascript"></script>
     <script type="text/javascript" language="javascript">
+
+        function CloseWin() {
+            window.close();
+            window.returnValue = true;
+        }
+
         function IsVaild(t) { //商品可用额度检测
             var source = t;
             var value = t.value;
@@ -100,9 +106,18 @@
             <asp:HiddenField ID="hfdGoodsID" runat="server" Value="-1" />
             <asp:HiddenField ID="hfdChangedID" runat="server" Value="-1" />
         </div>
-        <div>
+        <asp:Panel ID="GoodsChanged" runat="server">
+            <table style="width: 100%">
+                <tr style="height: 32px">
+                    <td style="width: 100%; background-color:#609870;  padding: 2px 5px 2px 5px; vertical-align:top;">
+                       <span>商品库存变更单</span>
+                       <div style=" float: right; vertical-align:top;"><asp:Button ID="btnChangedNew" 
+                               runat="server" Text="创建变更单" onclick="btnChangedNew_Click" /></div>
+                    </td>
+                </tr>
+            </table>
             <asp:DataList Width="980px" ID="internalChangedList" runat="server" ExtractTemplateRows="true"
-                CellPadding="2" DataKeyField="ChangedId" GridLines="Both" OnItemCommand="InternalChangedList_ItemCommand"
+                CellPadding="2" DataKeyField="ID" GridLines="Both" OnItemCommand="InternalChangedList_ItemCommand"
                 CssClass="margin:0px 0px 0px 0px; padding:0px 0px 0px 0px;">
                 <HeaderTemplate>
                     <asp:Table ID="tabHeader" runat="server">
@@ -129,26 +144,21 @@
                             onmouseout="this.style.backgroundColor=c" Style="background-color: Silver">
                             <asp:TableCell>
                                 <asp:LinkButton ID="lnkSelect" runat="Server" Text='<%#Container.ItemIndex+1%>' GroupName="SelectGroup"
-                                    Width="98%" AutoPostBack="True" CommandName="Select" CommandArgument='<%#Eval("ChangedId")%>' />
+                                    Width="98%" AutoPostBack="True" CommandName="Select" CommandArgument='<%#Eval("ID")%>' />
                             </asp:TableCell><asp:TableCell>
-                                <asp:HiddenField ID="hfGoodsID" runat="server" Value='<%#Eval("GoodsId")%>' />
-                                <asp:Literal ID="ltaId" runat="server" Text='<%#Eval("ChangedId")%>'></asp:Literal></asp:TableCell><asp:TableCell>
+                                <asp:Literal ID="ltaId" runat="server" Text='<%#Eval("ID")%>'></asp:Literal></asp:TableCell><asp:TableCell>
                                     <asp:Literal ID="ltaQuantity" runat="server" Text='<%#Eval("Quantity")%>'></asp:Literal></asp:TableCell><asp:TableCell>
                                         <asp:Literal ID="ltaValue" runat="server" Text='<%#Eval("Value")%>'></asp:Literal></asp:TableCell><asp:TableCell>
                                             <asp:Literal ID="ltaPieceCost" runat="server" Text='<%#Eval("PieceCost")%>'></asp:Literal></asp:TableCell><asp:TableCell>
                                                 <asp:Literal ID="ltaSumCost" runat="server" Text='<%#Eval("SumCost")%>'></asp:Literal></asp:TableCell><asp:TableCell>
                                                     <asp:Literal ID="ltaSource" runat="server" Text='<%#Eval("Source")%>'></asp:Literal></asp:TableCell><asp:TableCell>
-                                                        <asp:Literal ID="ltaDate" runat="server" Text='<%#Convert.ToDateTime(Eval("Date")).ToShortDateString()%>'></asp:Literal></asp:TableCell><asp:TableCell></asp:TableCell></asp:TableRow>
-                    </asp:Table>
-                </ItemTemplate>
-                <EditItemTemplate>
+                                                        <asp:Literal ID="ltaDate" runat="server" Text='<%#Convert.ToDateTime(Eval("Date")).ToShortDateString()%>'></asp:Literal></asp:TableCell><asp:TableCell></asp:TableCell></asp:TableRow></asp:Table></ItemTemplate><EditItemTemplate>
                     <asp:Table ID="tabEditItem" runat="server">
                         <asp:TableRow>
                             <asp:TableCell>
-                                <asp:Literal ID="ltaIndex" runat="server" Text='<%#Container.ItemIndex+1%>'></asp:Literal>
+                                
                             </asp:TableCell><asp:TableCell>
-                                <asp:HiddenField ID="hfEditGoodsID" runat="server" Value='<%#Eval("GoodsId")%>' />
-                                <asp:Literal ID="txtChangeID" runat="server" Text='<%#Eval("ChangedId")%>'></asp:Literal></asp:TableCell><asp:TableCell>
+                                <asp:Literal ID="txtChangeID" runat="server" Text='<%#Eval("ID")%>'></asp:Literal></asp:TableCell><asp:TableCell>
                                     <asp:Literal ID="ltaQuantity" runat="server" Text='<%#Eval("Quantity")%>'></asp:Literal></asp:TableCell><asp:TableCell>
                                         <asp:Literal ID="txtValue" runat="server" Text='<%#Eval("Value")%>'></asp:Literal></asp:TableCell><asp:TableCell>
                                             <asp:HiddenField ID="hfPieceCost" runat="server" Value='<%#Eval("PieceCost")%>' />
@@ -161,16 +171,13 @@
                                                                 <asp:HiddenField ID="hfDate" runat="server" Value='<%#Eval("Date")%>' />
                                                                 <asp:TextBox ID="txtDate" runat="server" CssClass="textBoxLine" Text='<%#Convert.ToDateTime(Eval("Date")).ToShortDateString()%>'
                                                                     onclick="WdatePicker();" Width="98%"></asp:TextBox></asp:TableCell><asp:TableCell>
-                                                                        <asp:LinkButton ID="lnkSave" runat="server" CommandName="Save" CommandArgument='<%#Eval("GoodsId")%>'>保存</asp:LinkButton>
-                                                                    </asp:TableCell></asp:TableRow>
-                    </asp:Table>
-                </EditItemTemplate>
-            </asp:DataList><webdiyer:AspNetPager ID="ChangedPager" CssClass="paginator" CurrentPageButtonClass="cpb"
+                                                                        <asp:LinkButton ID="lnkSave" runat="server" CommandName="Save">保存</asp:LinkButton>
+                                                                    </asp:TableCell></asp:TableRow></asp:Table></EditItemTemplate></asp:DataList><webdiyer:AspNetPager ID="ChangedPager" CssClass="paginator" CurrentPageButtonClass="cpb"
                 runat="server" AlwaysShow="True" FirstPageText="首页" LastPageText="尾页" NextPageText="下一页"
                 PrevPageText="上一页" ShowCustomInfoSection="Left" ShowInputBox="Never" CustomInfoTextAlign="Left"
                 LayoutType="Table" OnPageChanged="ChangedPager_PageChanged" PageSize="5">
             </webdiyer:AspNetPager>
-        </div>
+        </asp:Panel>
         <hr />
         <asp:DataList Width="100%" ID="dlChangedItems" runat="server" ExtractTemplateRows="true"
             CellPadding="2" DataKeyField="ID" GridLines="Both" CssClass="margin:0px 0px 0px 0px; padding:0px 0px 0px 0px;"
@@ -181,10 +188,7 @@
                         <asp:TableHeaderCell Width="45px">序号</asp:TableHeaderCell><asp:TableHeaderCell Width="60px">编号</asp:TableHeaderCell><asp:TableHeaderCell
                             Width="120px">标识</asp:TableHeaderCell><asp:TableHeaderCell Width="70px">出厂日期</asp:TableHeaderCell><asp:TableHeaderCell
                                 Width="70px">有效期限</asp:TableHeaderCell><asp:TableHeaderCell Width="60px">数量</asp:TableHeaderCell><asp:TableHeaderCell
-                                    Width="70px">操作</asp:TableHeaderCell></asp:TableRow>
-                </asp:Table>
-            </HeaderTemplate>
-            <ItemStyle ForeColor="Black" Height="30px" />
+                                    Width="70px">操作</asp:TableHeaderCell></asp:TableRow></asp:Table></HeaderTemplate><ItemStyle ForeColor="Black" Height="30px" />
             <FooterStyle BackColor="#C6C3C6" ForeColor="Black" />
             <HeaderStyle BackColor="#A6CBEF" Font-Bold="True" ForeColor="#404040" BorderColor="#A6CBEF"
                 Height="25px" />
@@ -206,10 +210,7 @@
                             <asp:Literal ID="ltaSumCost" runat="server" Text='<%#Eval("Quantity")%>' />
                         </asp:TableCell><asp:TableCell>
                             <asp:Literal ID="Literal1" runat="server" Text='<%#Eval("Quantity")%>' />
-                        </asp:TableCell></asp:TableRow>
-                </asp:Table>
-            </ItemTemplate>
-            <EditItemTemplate>
+                        </asp:TableCell></asp:TableRow></asp:Table></ItemTemplate><EditItemTemplate>
                 <asp:Table ID="tabEditItem" runat="server">
                     <asp:TableRow>
                         <asp:TableCell>
@@ -231,15 +232,8 @@
                         </asp:TableCell><asp:TableCell>
                             <asp:LinkButton ID="ItemSave" runat="Server" Text="确定" CommandName="Update" />
                             <asp:LinkButton ID="ItemCancel" runat="Server" Text="取消" CommandName="Cancel" />
-                        </asp:TableCell></asp:TableRow>
-                </asp:Table>
-            </EditItemTemplate>
-        </asp:DataList><asp:Panel ID="ToolBar" runat="Server" BorderWidth="1px" BorderStyle="Solid"
+                        </asp:TableCell></asp:TableRow></asp:Table></EditItemTemplate></asp:DataList><asp:Panel ID="ToolBar" runat="Server" BorderWidth="1px" BorderStyle="Solid"
             ScrollBars="None" Width="99%" Style="vertical-align: middle;" Height="32px" HorizontalAlign="Center"
             CssClass="menu">
             <asp:Button ID="btnSaveAll" runat="server" Text="保存" Style="margin: 5px 2px 2px 2px;"
-                OnClick="btnSaveAll_Click" /><asp:LinkButton ID="lnkCancel" runat="server" Style="margin: 5px 2px 2px 2px;">关闭</asp:LinkButton></asp:Panel>
-    </div>
-    </form>
-</body>
-</html>
+                OnClick="btnSaveAll_Click" /><asp:LinkButton ID="lnkCancel" runat="server" Style="margin: 5px 2px 2px 2px;">关闭</asp:LinkButton></asp:Panel></div></form></body></html>

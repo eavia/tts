@@ -1,8 +1,9 @@
 ﻿<%@ Page Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="GoodsList.aspx.cs"
-    Inherits="TaobaoTesting.GoodsManager.GoodsList" %>
+    Inherits="TaobaoTesting.GoodsManager.GoodsList" Title="商品信息" %>
 
 <%@ Register Assembly="AspNetPager" Namespace="Wuqi.Webdiyer" TagPrefix="webdiyer" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
+    <script src="../Scripts/jquery-1.4.1.min.js" type="text/javascript"></script>
     <script type="text/javascript">
         function ShowBox(obj) {
             var features =
@@ -11,7 +12,7 @@
 		        'dialogLeft:' + 80 + 'px;' +
 		        'dialogTop:' + 120 + 'px;' +
 		        'directories:no; localtion:no; menubar:no; status=no; toolbar=no;scrollbars:yes;Resizeable=no';
-            var retval = window.showModalDialog(obj.src, "getReturn", features);
+            var retval = window.showModalDialog($(obj).attr('src'), "getReturn", features);
             return retval;
         }
     </script>
@@ -73,7 +74,7 @@
                                 <asp:Literal ID="ltaUnit" runat="server" Text='<%#Eval("Unit.UnitName")%>'></asp:Literal></asp:TableCell>
                             <asp:TableCell>
                                 <asp:LinkButton ID="LinkButton1" runat="Server" OnClientClick="return ShowBox(this);"
-                                    src='<%#"ChangedList.aspx?gid="+Eval("ID") %>' Text='变动<%#Container.ItemIndex+1%>'></asp:LinkButton>
+                                    src='<%#"ChangedList.aspx?gid="+Eval("ID") %>' Text='变动<%#Container.ItemIndex+1%>' CommandName="Changed"></asp:LinkButton>
                                 <asp:LinkButton ID="lnkDelete" runat="server" CommandArgument='<%#Eval("ID")%>' CommandName="Delete">删除</asp:LinkButton>
                             </asp:TableCell>
                         </asp:TableRow>

@@ -16,6 +16,48 @@ namespace TaobaoTesting.GoodsManager
     {
         private GoodsLogic glogic;
 
+        public int ContextGoodsID
+        {
+            get { return int.Parse(hfdGoodsID.Value); }
+            set { hfdGoodsID.Value = value.ToString(); }
+        }
+
+        public int ContextChangedID
+        {
+            get { return int.Parse(hfdChangedID.Value); }
+            set { hfdChangedID.Value = value.ToString(); }
+        }
+
+        public Goods ContextGoods
+        {
+            get
+            {
+                return (Goods)ViewState["ContextGoods"];
+            }
+            set
+            {
+                if (value != null)
+                {
+                    ViewState["ContextGoods"] = value;
+                }
+            }
+        }
+
+        public Changed ContextChanged
+        {
+            get
+            {
+                return (Changed)ViewState["ContextChanged"];
+            }
+            set
+            {
+                if (value != null)
+                {
+                    ViewState["ContextGoods"] = value;
+                }
+            }
+        }
+
         private StoreEntities dbContext;
 
         private void GetSource()
@@ -33,187 +75,45 @@ namespace TaobaoTesting.GoodsManager
             dbContext = tmp;
         }
 
-        internal class PageChange
-        {
-            int goodsId;
-
-            public int GoodsId
-            {
-                get { return goodsId; }
-                set { goodsId = value; }
-            }
-            int changedId;
-
-            public int ChangedId
-            {
-                get { return changedId; }
-                set { changedId = value; }
-            }
-
-            decimal quantity;
-
-            public decimal Quantity
-            {
-                get { return this.quantity; }
-                set { this.quantity = value; }
-            }
-
-            decimal value;
-
-            public decimal Value
-            {
-                get { return this.value; }
-                set { this.value = value; }
-            }
-
-            decimal pieceCost;
-
-            public decimal PieceCost
-            {
-                get { return pieceCost; }
-                set { pieceCost = value; }
-            }
-
-            decimal sumCost;
-
-            public decimal SumCost
-            {
-                get { return sumCost; }
-                set { sumCost = value; }
-            }
-
-            string source;
-
-            public string Source
-            {
-                get { return source; }
-                set { source = value; }
-            }
-
-            DateTime date;
-
-            public DateTime Date
-            {
-                get { return date; }
-                set { date = value; }
-            }
-        }
-
         public ChangedList()
         {
             GetSource();
             glogic = new GoodsLogic(dbContext, this.ContextUserKey);
         }
 
-        private int _contextGoodsID = -1;
-
-        private int _contextChangedID = -1;
-
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
+                this.AttacthConfirmForControl(this.btnChangedNew, "创建变更单将导致现有操作结果丢失,确定?");
+
                 string goodsid = (this.Request.QueryString["gid"] ?? "NaN").ToString();
-                hfdGoodsID.Value = goodsid;
-                _contextGoodsID = int.Parse(hfdGoodsID.Value);
-                BindInternalChangedList(_contextGoodsID);
-                _contextChangedID = int.Parse(hfdChangedID.Value);
-            }
-            else
-            {
-                _contextGoodsID = int.Parse(hfdGoodsID.Value);
-                _contextChangedID = int.Parse(hfdChangedID.Value);
-            }
 
+                this.ContextGoodsID = int.Parse(goodsid);
+
+                this.ContextGoods = glogic.GetGoodsByID(this.ContextGoodsID);
+
+                BindInternalChangedList(this.ContextGoods);
+
+            }
         }
 
-        private void BindInternalChangedList(int id)
+        private void BindInternalChangedList(Goods god)
         {
-            Goods g = glogic.GetGoodsByID(id);
-            this.ChangedPager.RecordCount = g.ChangedSet.Count();
-            var ds = g.ChangedSet.OrderByDescending(x => x.ID)
+            this.ChangedPager.RecordCount = god.ChangedSet.Count();
+            var ds = god.ChangedSet.OrderByDescending(x => x.Date)
                 .Skip((this.ChangedPager.StartRecordIndex > 0 ? this.ChangedPager.StartRecordIndex - 1 : 0)).Take(ChangedPager.PageSize);
-
-            List<PageChange> lst = new List<PageChange>();
-            foreach (Changed cd in ds)
-            {
-                PageChange pc = new PageChange();
-                pc.ChangedId = cd.ID;
-                pc.GoodsId = _contextGoodsID;
-                pc.Value = cd.Value;
-                pc.Quantity = cd.Quantity;
-                pc.Date = cd.Date;
-                pc.PieceCost = cd.PieceCost;
-                pc.SumCost = cd.SumCost;
-                pc.Source = cd.Source;
-                lst.Add(pc);
-            }
-
-            PageChange empty = new PageChange();
-            empty.ChangedId = -1;
-            empty.GoodsId = _contextGoodsID;
-            empty.Quantity = g.Quantity;
-            empty.Value = 0;
-            empty.PieceCost = 0;
-            empty.SumCost = 0;
-            empty.Source = "";
-            empty.Date = DateTime.Now;
-            lst.Add(empty);
-
-            internalChangedList.DataSource = lst;
-            internalChangedList.EditItemIndex = lst.Count - 1;
-            internalChangedList.DataBind();
             this.ChangedPager.CustomInfoHTML = string.Format("当前第{0}/{1}页 共{2}条记录 每页{3}条", new object[] { this.ChangedPager.CurrentPageIndex, this.ChangedPager.PageCount, this.ChangedPager.RecordCount, this.ChangedPager.PageSize });
-        }
-
-        protected void InternalChangedList_ItemCommand(object source, DataListCommandEventArgs e)
-        {
-            string itemId = e.CommandArgument.ToString();
-            if (e.CommandName == "Save")
-            {
-                DataList dl = (DataList)source;
-                Goods g = glogic.GetGoodsByID(_contextGoodsID);
-                DataListItem dli = e.Item;
-                HiddenField orgCost = (HiddenField)dli.FindControl("hfPieceCost");
-                TextBox Cost = (TextBox)dli.FindControl("txtPieceCost");
-
-                Changed chg = dbContext.CreateObject<Changed>();
-                chg.Quantity = decimal.Parse(((Literal)dli.FindControl("ltaQuantity")).Text);
-                chg.Value = decimal.Parse(((Literal)dli.FindControl("txtValue")).Text);
-
-                chg.PieceCost = decimal.Parse(((TextBox)dli.FindControl("txtPieceCost")).Text);
-                chg.Date = DateTime.Parse(((TextBox)dli.FindControl("txtDate")).Text);
-                chg.Source = ((TextBox)dli.FindControl("txtSource")).Text.Trim();
-
-                chg.Goods = g;
-                glogic.AddChangedToGoods(g, chg);
-                dbContext.SaveChanges();
-                BindInternalChangedList(_contextGoodsID);
-
-            }
-            else if (e.CommandName == "Select")
-            {
-                DataList dl = (DataList)source;
-                dl.SelectedIndex = e.Item.ItemIndex;
-                Changed c = null;
-                if (!hfdChangedID.Value.Equals(e.CommandArgument.ToString()))
-                {
-                    hfdChangedID.Value = e.CommandArgument.ToString();
-                    int id = int.Parse(e.CommandArgument.ToString());
-                    c = glogic.GetChangedByID(id);
-                    ViewState.Add("PageSeletedChanged", c);
-                }
-                else
-                {
-                    c = (Changed)ViewState["PageSeletedChanged"];
-                }
-                BindItemsWithCID(c);
-            }
+            internalChangedList.DataSource = ds;
+            internalChangedList.DataBind();
         }
 
         protected void BindItemsWithCID(Changed c)
         {
-
+            if (!c.GoodsItemSet.IsLoaded)
+            {
+                c.GoodsItemSet.Load();
+            }
             List<GoodsItem> lst = null;
             if (c.GoodsItemSet.Count == 0)
             {
@@ -236,9 +136,41 @@ namespace TaobaoTesting.GoodsManager
             dlChangedItems.DataBind();
         }
 
+        protected void InternalChangedList_ItemCommand(object source, DataListCommandEventArgs e)
+        {
+            string itemId = e.CommandArgument.ToString();
+            if (e.CommandName == "Save")
+            {
+                if (glogic.UpdateGoods(GetPageGoods()))
+                {
+                    SetPageGoods(glogic.GetGoodsByID(this.ContextGoodsID));
+                    this.internalChangedList.EditItemIndex = -1;
+                    BindInternalChangedList();
+                }
+            }
+            else if (e.CommandName == "Select")
+            {
+                DataList dl = (DataList)source;
+                dl.SelectedIndex = e.Item.ItemIndex;
+                Changed c = null;
+                if (!hfdChangedID.Value.Equals(e.CommandArgument.ToString()))
+                {
+                    hfdChangedID.Value = e.CommandArgument.ToString();
+                    int id = int.Parse(e.CommandArgument.ToString());
+                    c = glogic.GetChangedByID(id);
+                    ViewState.Add("PageSeletedChanged", c);
+                }
+                else
+                {
+                    c = (Changed)ViewState["PageSeletedChanged"];
+                }
+                BindItemsWithCID(c);
+            }
+        }
+
         protected void ChangedPager_PageChanged(object sender, EventArgs e)
         {
-            BindInternalChangedList(_contextGoodsID);
+            BindInternalChangedList();
         }
 
         protected void dlChangedItems_UpdateCommand(object source, DataListCommandEventArgs e)
@@ -255,17 +187,21 @@ namespace TaobaoTesting.GoodsManager
             c.Value = c.GoodsItemSet.Sum(x => x.Quantity);
             c.SumCost = c.GoodsItemSet.Sum(x => x.Quantity * c.PieceCost);
             ViewState["PageSeletedChanged"] = c;
-            BindInternalChangedList(_contextGoodsID);
+            BindInternalChangedList();
             BindItemsWithCID(c);
         }
 
         protected void btnSaveAll_Click(object sender, EventArgs e)
         {
-            Goods g = glogic.GetGoodsByID(_contextGoodsID);
+            Goods g = glogic.GetGoodsByID(this.ContextGoodsID);
             Changed c = (Changed)ViewState["PageSeletedChanged"]; //获取页面上的进货单
-            if (glogic.UpdateingGoodsWithChanged(g, c))
+            if (!glogic.UpdateingGoodsWithChanged(g, c))
             {
                 throw new Exception("保存失败!");
+            }
+            else
+            {
+                this.ClientScript.RegisterClientScriptBlock(Page.GetType(), "Close", "CloseWin()", true);
             }
         }
 
@@ -274,5 +210,23 @@ namespace TaobaoTesting.GoodsManager
             Changed c = (Changed)ViewState["PageSeletedChanged"];
             BindItemsWithCID(c);
         }
+
+        protected void btnChangedNew_Click(object sender, EventArgs e)
+        {
+            Goods God = GetPageGoods();
+            Changed newChanged = new Changed();
+
+            newChanged.Date = DateTime.Now;
+            if (!God.ChangedSet.IsLoaded)
+            {
+                God.ChangedSet.Load();
+            }
+            God.ChangedSet.Attach(newChanged);
+            SetPageGoods(God);
+            this.internalChangedList.EditItemIndex = 0;
+            BindInternalChangedList();
+
+        }
+
     }
 }

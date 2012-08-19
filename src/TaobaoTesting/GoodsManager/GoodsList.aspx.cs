@@ -136,6 +136,10 @@ namespace TaobaoTesting.GoodsManager
                 DataList dl = (DataList)source;
                 dl.SelectedIndex = e.Item.ItemIndex;
             }
+            else if (cmd.Equals("Changed"))
+            {
+                BindGridView();
+            }
         }
 
         protected void GoodsPager_PageChanged(object sender, EventArgs e)

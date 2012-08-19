@@ -50,14 +50,16 @@ namespace LogicLibary.GoodsManager
         public Goods GetGoodsByID(int goodsid)
         {
             Goods g = null;
-            try
-            {
-                g = this.ObjectContext.EntitySet.OfType<Goods>().Single(gg => gg.ID.Equals(goodsid) && gg.UserKey.Equals(this.ContextUserKey));
-            }
-            catch
-            {
 
+            ObjectParameter p = new ObjectParameter("p", goodsid);
+            ObjectQuery<Goods> set = this.ObjectContext.EntitySet.OfType<Goods>().Where("it.ID=@p", p);
+
+            if (set.Count() == 1)
+            {
+                g = set.First();
             }
+
+
             return g;
         }
 
@@ -90,6 +92,28 @@ namespace LogicLibary.GoodsManager
                     this.ObjectContext.SaveChanges();
 
 
+                    scope.Complete();
+                    this.ObjectContext.AcceptAllChanges();
+                    return true;
+                }
+            }
+            catch
+            {
+
+            }
+            return false;
+        }
+
+        public bool UpdateGoods(Goods g)
+        {
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    this.ObjectContext.SaveChanges();
+                    decimal sum = g.ChangedSet.Sum(x => x.Value);
+                    g.Quantity = sum;
+                    this.ObjectContext.SaveChanges();
                     scope.Complete();
                     this.ObjectContext.AcceptAllChanges();
                     return true;
