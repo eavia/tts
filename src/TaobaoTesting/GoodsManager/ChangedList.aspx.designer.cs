@@ -10,7 +10,7 @@
 namespace TaobaoTesting.GoodsManager {
     
     
-    public partial class ChangeList {
+    public partial class ChangedList {
         
         /// <summary>
         /// hfdGoodsID 控件。

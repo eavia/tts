@@ -81,7 +81,7 @@
     <Content Include="Datepicker\WdatePicker.js" />
     <Content Include="Function.aspx" />
     <Content Include="GoodsManager\BrandList.aspx" />
-    <Content Include="GoodsManager\ChangeList.aspx" />
+    <Content Include="GoodsManager\ChangedList.aspx" />
     <Content Include="GoodsManager\GoodsList.aspx" />
     <Content Include="Images\alipay.gif" />
     <Content Include="Images\asc.gif" />
@@ -193,12 +193,12 @@
     <Compile Include="GoodsManager\BrandList.aspx.designer.cs">
       <DependentUpon>BrandList.aspx</DependentUpon>
     </Compile>
-    <Compile Include="GoodsManager\ChangeList.aspx.cs">
-      <DependentUpon>ChangeList.aspx</DependentUpon>
+    <Compile Include="GoodsManager\ChangedList.aspx.cs">
+      <DependentUpon>ChangedList.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="GoodsManager\ChangeList.aspx.designer.cs">
-      <DependentUpon>ChangeList.aspx</DependentUpon>
+    <Compile Include="GoodsManager\ChangedList.aspx.designer.cs">
+      <DependentUpon>ChangedList.aspx</DependentUpon>
     </Compile>
     <Compile Include="GoodsManager\GoodsList.aspx.cs">
       <DependentUpon>GoodsList.aspx</DependentUpon>

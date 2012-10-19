@@ -1,5 +1,5 @@
 ﻿<%@ Page Title="商品库存信息" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true"
-    CodeBehind="ChangeList.aspx.cs" Inherits="TaobaoTesting.GoodsManager.ChangeList" %>
+    CodeBehind="ChangedList.aspx.cs" Inherits="TaobaoTesting.GoodsManager.ChangedList" %>
 
 <%@ Register Assembly="AspNetPager" Namespace="Wuqi.Webdiyer" TagPrefix="webdiyer" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
@@ -96,6 +96,7 @@
         <asp:HiddenField ID="hfdChangedID" runat="server" Value="-1" />
     </div>
     <asp:Panel ID="GoodsChanged" runat="server">
+        <div id="ChangedListDiv" style="margin 2px 2px 2px 2px; width:100%;">
         <table style="width: 100%">
             <tr style="height: 32px">
                 <td style="width: 100%; background-color: #609870; padding: 2px 5px 2px 5px; vertical-align: top;">
@@ -105,8 +106,8 @@
                 </td>
             </tr>
         </table>
-        <asp:DataList Width="99%" ID="dlChangedList" runat="server" ExtractTemplateRows="true"
-            CellPadding="2" DataKeyField="ID" GridLines="Both" CssClass="margin:0px 0px 0px 0px; padding:0px 0px 0px 0px;">
+        <asp:DataList Width="100%" ID="dlChangedList" runat="server" ExtractTemplateRows="true"
+            CellPadding="2" DataKeyField="ID" GridLines="Both">
             <HeaderTemplate>
                 <asp:Table ID="tabHeader" runat="server">
                     <asp:TableRow>
@@ -160,11 +161,11 @@
                                                             <asp:TextBox ID="txtDate" runat="server" CssClass="textBoxLine" Text='<%#Convert.ToDateTime(Eval("Date")).ToShortDateString()%>'
                                                                 onclick="WdatePicker();" Width="98%"></asp:TextBox></asp:TableCell><asp:TableCell>
                                                                     <asp:LinkButton ID="lnkSave" runat="server" CommandName="Save">保存</asp:LinkButton>
-                                                                </asp:TableCell></asp:TableRow></asp:Table></EditItemTemplate></asp:DataList><webdiyer:AspNetPager 
-            ID="ChangedPager" CssClass="paginator" CurrentPageButtonClass="cpb"
+                                                                </asp:TableCell></asp:TableRow></asp:Table></EditItemTemplate></asp:DataList></div><webdiyer:AspNetPager ID="ChangedPager" CssClass="paginator" CurrentPageButtonClass="cpb"
             runat="server" AlwaysShow="True" FirstPageText="首页" LastPageText="尾页" NextPageText="下一页"
             PrevPageText="上一页" ShowCustomInfoSection="Left" showinputbox="Never" CustomInfoTextAlign="Left"
-            LayoutType="Table" PageSize="5" onpagechanged="ChangedPager_PageChanged"></webdiyer:AspNetPager>
+            LayoutType="Table" PageSize="5" OnPageChanged="ChangedPager_PageChanged">
+        </webdiyer:AspNetPager>
     </asp:Panel>
     <hr />
     <asp:DataList Width="100%" ID="dlChangedItems" runat="server" ExtractTemplateRows="true"
@@ -219,8 +220,8 @@
                     </asp:TableCell><asp:TableCell>
                         <asp:LinkButton ID="ItemSave" runat="Server" Text="确定" CommandName="Update" />
                         <asp:LinkButton ID="ItemCancel" runat="Server" Text="取消" CommandName="Cancel" />
-                    </asp:TableCell></asp:TableRow></asp:Table></EditItemTemplate></asp:DataList><asp:Panel ID="ToolBar" runat="Server" BorderWidth="1px" BorderStyle="Solid" ScrollBars="None"
-        Width="99%" Style="vertical-align: middle;" Height="32px" HorizontalAlign="Center"
+                    </asp:TableCell></asp:TableRow></asp:Table></EditItemTemplate></asp:DataList><asp:Panel ID="ToolBar" runat="Server" BorderWidth="1px" BorderStyle="Solid"
+        ScrollBars="None" Width="99%" Style="vertical-align: middle;" Height="32px" HorizontalAlign="Center"
         CssClass="menu">
         <asp:Button ID="btnSaveAll" runat="server" Text="保存" Style="margin: 5px 2px 2px 2px;" />
         <asp:LinkButton ID="lnkCancel" runat="server" Style="margin: 5px 2px 2px 2px;">返回</asp:LinkButton></asp:Panel></asp:Content>

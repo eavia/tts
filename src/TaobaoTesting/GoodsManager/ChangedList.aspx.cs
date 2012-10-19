@@ -9,7 +9,7 @@ using LogicLibary.GoodsManager;
 
 namespace TaobaoTesting.GoodsManager
 {
-    public partial class ChangeList : BasePage
+    public partial class ChangedList : BasePage
     {
 
         private GoodsLogic Logic;
